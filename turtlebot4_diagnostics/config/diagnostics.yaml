@@ -1,0 +1,39 @@
+analyzers:
+  ros__parameters:
+    path: Turtlebot4
+    create3:
+      type: diagnostic_aggregator/AnalyzerGroup
+      path: Create3
+      analyzers:
+        battery:
+          type: diagnostic_aggregator/GenericAnalyzer
+          path: Battery
+          contains: [ 'Battery' ]
+        wheels:
+          type: diagnostic_aggregator/GenericAnalyzer
+          path: Wheels
+          contains: [ 'Wheel' ]
+        docked:
+          type: diagnostic_aggregator/GenericAnalyzer
+          path: Dock
+          contains: [ 'Dock' ]
+        hazards:
+          type: diagnostic_aggregator/GenericAnalyzer
+          path: Hazards
+          contains: [ 'Hazard' ]
+        imu:
+          type: diagnostic_aggregator/GenericAnalyzer
+          path: IMU
+          contains: [ 'imu' ]
+        mouse:
+          type: diagnostic_aggregator/GenericAnalyzer
+          path: Mouse
+          contains: [ 'mouse' ]
+    lidar:
+      type: diagnostic_aggregator/GenericAnalyzer
+      path: Lidar
+      contains: [ 'scan' ]
+    camera:
+      type: diagnostic_aggregator/GenericAnalyzer
+      path: Camera
+      contains: [ 'image', 'depth' ]
