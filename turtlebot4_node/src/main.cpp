@@ -59,11 +59,10 @@ int main(int argc, char * argv[])
   rclcpp::executors::SingleThreadedExecutor executor;
 
   bool use_sim = use_sim_arg == "true" ? true : false;
-  
+
   turtlebot4::Turtlebot4Model model = turtlebot4::Turtlebot4Model::STANDARD;
 
-  if (model_arg == "lite")
-  {
+  if (model_arg == "lite") {
     model = turtlebot4::Turtlebot4Model::LITE;
   }
 

@@ -1,11 +1,30 @@
+#!/usr/bin/env python3
+# Copyright 2021 Clearpath Robotics, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# @author Roni Kreinin (rkreinin@clearpathrobotics.com)
+
+
 import os
 
 from ament_index_python.packages import get_package_share_directory
-from launch import LaunchDescription, launch_description_sources
-from launch.actions import IncludeLaunchDescription
-from launch.actions import DeclareLaunchArgument
+
+from launch import launch_description_sources, LaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.conditions import LaunchConfigurationEquals
 from launch.substitutions import LaunchConfiguration
+
 import launch_ros.actions
 import launch_ros.descriptions
 
@@ -13,39 +32,41 @@ import launch_ros.descriptions
 def generate_launch_description():
     urdf_launch_dir = os.path.join(get_package_share_directory('depthai_bridge'), 'launch')
 
-    camera_model = LaunchConfiguration('camera_model',  default = 'OAK-D')
-    camera_name  = LaunchConfiguration('camera_name',   default = 'oak')
-    base_frame   = LaunchConfiguration('base_frame',    default = 'oak-d_frame')
-    parent_frame = LaunchConfiguration('parent_frame',  default = 'oak-d-base-frame')
+    camera_model = LaunchConfiguration('camera_model',  default='OAK-D')
+    camera_name = LaunchConfiguration('camera_name',   default='oak')
+    base_frame = LaunchConfiguration('base_frame',    default='oak-d_frame')
+    parent_frame = LaunchConfiguration('parent_frame',  default='oak-d-base-frame')
 
-    cam_pos_x  = LaunchConfiguration('cam_pos_x',     default = '0.0')
-    cam_pos_y  = LaunchConfiguration('cam_pos_y',     default = '0.0')
-    cam_pos_z  = LaunchConfiguration('cam_pos_z',     default = '0.0')
-    cam_roll   = LaunchConfiguration('cam_roll',      default = '0.0')
-    cam_pitch  = LaunchConfiguration('cam_pitch',     default = '0.0')
-    cam_yaw    = LaunchConfiguration('cam_yaw',       default = '0.0')
+    cam_pos_x = LaunchConfiguration('cam_pos_x',     default='0.0')
+    cam_pos_y = LaunchConfiguration('cam_pos_y',     default='0.0')
+    cam_pos_z = LaunchConfiguration('cam_pos_z',     default='0.0')
+    cam_roll = LaunchConfiguration('cam_roll',      default='0.0')
+    cam_pitch = LaunchConfiguration('cam_pitch',     default='0.0')
+    cam_yaw = LaunchConfiguration('cam_yaw',       default='0.0')
 
-    mode         = LaunchConfiguration('mode', default = 'depth')
-    lrcheck      = LaunchConfiguration('lrcheck', default = True)
-    extended     = LaunchConfiguration('extended', default = False)
-    subpixel     = LaunchConfiguration('subpixel', default = True)
-    confidence   = LaunchConfiguration('confidence', default = 200)
-    LRchecktresh = LaunchConfiguration('LRchecktresh', default = 5)
+    mode = LaunchConfiguration('mode', default='depth')
+    lrcheck = LaunchConfiguration('lrcheck', default=True)
+    extended = LaunchConfiguration('extended', default=False)
+    subpixel = LaunchConfiguration('subpixel', default=True)
+    confidence = LaunchConfiguration('confidence', default=200)
+    LRchecktresh = LaunchConfiguration('LRchecktresh', default=5)
 
-    robot_model = DeclareLaunchArgument('model', 
-        default_value='standard',
-        choices=['standard', 'lite'],
-        description='Turtlebot4 Model')
+    robot_model = DeclareLaunchArgument('model',
+                                        default_value='standard',
+                                        choices=['standard', 'lite'],
+                                        description='Turtlebot4 Model')
 
     declare_camera_model_cmd = DeclareLaunchArgument(
         'camera_model',
         default_value=camera_model,
-        description='The model of the camera. Using a wrong camera model can disable camera features. Valid models: `OAK-D, OAK-D-LITE`.')
+        description='The model of the camera. Using a wrong camera model can disable camera features. \
+                     Valid models: `OAK-D, OAK-D-LITE`.')
 
     declare_camera_name_cmd = DeclareLaunchArgument(
         'camera_name',
         default_value=camera_name,
-        description='The name of the camera. It can be different from the camera model and it will be used in naming TF.')
+        description='The name of the camera. It can be different from the camera model \
+                     and it will be used in naming TF.')
 
     declare_base_frame_cmd = DeclareLaunchArgument(
         'base_frame',
@@ -55,7 +76,8 @@ def generate_launch_description():
     declare_parent_frame_cmd = DeclareLaunchArgument(
         'parent_frame',
         default_value=parent_frame,
-        description='Name of the parent link from other a robot TF for example that can be connected to the base of the OAK.')
+        description='Name of the parent link from other a robot TF for example \
+                     that can be connected to the base of the OAK.')
 
     declare_pos_x_cmd = DeclareLaunchArgument(
         'cam_pos_x',
@@ -90,46 +112,42 @@ def generate_launch_description():
     declare_mode_cmd = DeclareLaunchArgument(
         'mode',
         default_value=mode,
-        description='set to depth or disparity. Setting to depth will publish depth or else will publish disparity.')
+        description='set to depth or disparity. \
+                     Setting to depth will publish depth or else will publish disparity.')
 
     declare_lrcheck_cmd = DeclareLaunchArgument(
         'lrcheck',
-        default_value=lrcheck,
-        description='The name of the camera. It can be different from the camera model and it will be used as node `namespace`.')
+        default_value=lrcheck)
 
     declare_extended_cmd = DeclareLaunchArgument(
         'extended',
-        default_value=extended,
-        description='The name of the camera. It can be different from the camera model and it will be used as node `namespace`.')
+        default_value=extended)
 
     declare_subpixel_cmd = DeclareLaunchArgument(
         'subpixel',
-        default_value=subpixel,
-        description='The name of the camera. It can be different from the camera model and it will be used as node `namespace`.')
-    
+        default_value=subpixel)
+
     declare_confidence_cmd = DeclareLaunchArgument(
         'confidence',
-        default_value=confidence,
-        description='The name of the camera. It can be different from the camera model and it will be used as node `namespace`.')
-    
+        default_value=confidence)
+
     declare_LRchecktresh_cmd = DeclareLaunchArgument(
         'LRchecktresh',
-        default_value=LRchecktresh,
-        description='The name of the camera. It can be different from the camera model and it will be used as node `namespace`.')
-    
+        default_value=LRchecktresh)
+
     urdf_launch = IncludeLaunchDescription(
                             launch_description_sources.PythonLaunchDescriptionSource(
                                     os.path.join(urdf_launch_dir, 'urdf_launch.py')),
-                            launch_arguments={'camera_name' : camera_name,
+                            launch_arguments={'camera_name': camera_name,
                                               'camera_model': camera_model,
-                                              'base_frame'  : base_frame,
+                                              'base_frame': base_frame,
                                               'parent_frame': parent_frame,
-                                              'cam_pos_x'   : cam_pos_x,
-                                              'cam_pos_y'   : cam_pos_y,
-                                              'cam_pos_z'   : cam_pos_z,
-                                              'cam_roll'    : cam_roll,
-                                              'cam_pitch'   : cam_pitch,
-                                              'cam_yaw'     : cam_yaw}.items())
+                                              'cam_pos_x': cam_pos_x,
+                                              'cam_pos_y': cam_pos_y,
+                                              'cam_pos_z': cam_pos_z,
+                                              'cam_roll': cam_roll,
+                                              'cam_pitch': cam_pitch,
+                                              'cam_yaw': cam_yaw}.items())
 
     stereo_node = launch_ros.actions.Node(
             package='depthai_examples', executable='stereo_node',
@@ -162,17 +180,17 @@ def generate_launch_description():
     ld.add_action(robot_model)
     ld.add_action(declare_camera_name_cmd)
     ld.add_action(declare_camera_model_cmd)
-    
+
     ld.add_action(declare_base_frame_cmd)
     ld.add_action(declare_parent_frame_cmd)
-    
+
     ld.add_action(declare_pos_x_cmd)
     ld.add_action(declare_pos_y_cmd)
     ld.add_action(declare_pos_z_cmd)
     ld.add_action(declare_roll_cmd)
     ld.add_action(declare_pitch_cmd)
     ld.add_action(declare_yaw_cmd)
-    
+
     ld.add_action(declare_mode_cmd)
     ld.add_action(declare_lrcheck_cmd)
     ld.add_action(declare_extended_cmd)

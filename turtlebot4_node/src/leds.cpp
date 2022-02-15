@@ -18,84 +18,100 @@
 
 #include "turtlebot4_node/leds.hpp"
 
-using namespace turtlebot4;
+#include <memory>
 
-Leds::Leds(std::shared_ptr<rclcpp::Node> &nh,
-           std::shared_ptr<GpioInterface> gpio_interface, bool use_sim) : nh_(nh),
-                                                                          gpio_interface_(gpio_interface),
-                                                                          use_sim_(use_sim)
+using turtlebot4::Leds;
 
+Leds::Leds(
+  std::shared_ptr<rclcpp::Node> & nh,
+  std::shared_ptr<GpioInterface> gpio_interface, bool use_sim)
+: nh_(nh),
+  gpio_interface_(gpio_interface),
+  use_sim_(use_sim)
 {
-    RCLCPP_INFO(nh_->get_logger(), "Leds Init");
+  RCLCPP_INFO(nh_->get_logger(), "Leds Init");
 
-    // Power
-    leds_ = {
-        {Turtlebot4LedEnum::POWER,      std::make_shared<Turtlebot4Led>(use_sim_, gpio_interface_, HMI_LED_POWER_PIN)},
-        {Turtlebot4LedEnum::MOTORS,     std::make_shared<Turtlebot4Led>(use_sim_, gpio_interface_, HMI_LED_MOTORS_PIN)},
-        {Turtlebot4LedEnum::COMMS,      std::make_shared<Turtlebot4Led>(use_sim_, gpio_interface_, HMI_LED_COMMS_PIN)},
-        {Turtlebot4LedEnum::WIFI,       std::make_shared<Turtlebot4Led>(use_sim_, gpio_interface_, HMI_LED_WIFI_PIN)},
-        {Turtlebot4LedEnum::BATTERY,    std::make_shared<Turtlebot4Led>(use_sim_, gpio_interface_, HMI_LED_BATTERY_GREEN_PIN, HMI_LED_BATTERY_RED_PIN)},
-        {Turtlebot4LedEnum::USER_1,     std::make_shared<Turtlebot4Led>(use_sim_, gpio_interface_, HMI_LED_USER_1_PIN)},
-        {Turtlebot4LedEnum::USER_2,     std::make_shared<Turtlebot4Led>(use_sim_, gpio_interface_, HMI_LED_USER_2_GREEN_PIN, HMI_LED_USER_2_RED_PIN)},
-    };
+  // Power
+  leds_ = {
+    {Turtlebot4LedEnum::POWER, std::make_shared<Turtlebot4Led>(
+        use_sim_, gpio_interface_,
+        HMI_LED_POWER_PIN)},
+    {Turtlebot4LedEnum::MOTORS, std::make_shared<Turtlebot4Led>(
+        use_sim_, gpio_interface_,
+        HMI_LED_MOTORS_PIN)},
+    {Turtlebot4LedEnum::COMMS, std::make_shared<Turtlebot4Led>(
+        use_sim_, gpio_interface_,
+        HMI_LED_COMMS_PIN)},
+    {Turtlebot4LedEnum::WIFI, std::make_shared<Turtlebot4Led>(
+        use_sim_, gpio_interface_,
+        HMI_LED_WIFI_PIN)},
+    {Turtlebot4LedEnum::BATTERY, std::make_shared<Turtlebot4Led>(
+        use_sim_, gpio_interface_,
+        HMI_LED_BATTERY_GREEN_PIN,
+        HMI_LED_BATTERY_RED_PIN)},
+    {Turtlebot4LedEnum::USER_1, std::make_shared<Turtlebot4Led>(
+        use_sim_, gpio_interface_,
+        HMI_LED_USER_1_PIN)},
+    {Turtlebot4LedEnum::USER_2, std::make_shared<Turtlebot4Led>(
+        use_sim_, gpio_interface_,
+        HMI_LED_USER_2_GREEN_PIN,
+        HMI_LED_USER_2_RED_PIN)},
+  };
 
-    user_led_sub_ = nh_->create_subscription<turtlebot4_msgs::msg::UserLed>(
-        "/hmi/led/set",
-        rclcpp::SensorDataQoS(),
-        std::bind(&Leds::user_led_callback, this, std::placeholders::_1));
+  user_led_sub_ = nh_->create_subscription<turtlebot4_msgs::msg::UserLed>(
+    "/hmi/led/set",
+    rclcpp::SensorDataQoS(),
+    std::bind(&Leds::user_led_callback, this, std::placeholders::_1));
 
-    leds_[Turtlebot4LedEnum::POWER]->create_publisher(nh_,   "/hmi/led/_power");
-    leds_[Turtlebot4LedEnum::MOTORS]->create_publisher(nh_,  "/hmi/led/_motors");
-    leds_[Turtlebot4LedEnum::COMMS]->create_publisher(nh_,   "/hmi/led/_comms");
-    leds_[Turtlebot4LedEnum::WIFI]->create_publisher(nh_,    "/hmi/led/_wifi");
-    leds_[Turtlebot4LedEnum::BATTERY]->create_publisher(nh_, "/hmi/led/_battery");
-    leds_[Turtlebot4LedEnum::USER_1]->create_publisher(nh_,  "/hmi/led/_user1");
-    leds_[Turtlebot4LedEnum::USER_2]->create_publisher(nh_,  "/hmi/led/_user2");
+  leds_[Turtlebot4LedEnum::POWER]->create_publisher(nh_, "/hmi/led/_power");
+  leds_[Turtlebot4LedEnum::MOTORS]->create_publisher(nh_, "/hmi/led/_motors");
+  leds_[Turtlebot4LedEnum::COMMS]->create_publisher(nh_, "/hmi/led/_comms");
+  leds_[Turtlebot4LedEnum::WIFI]->create_publisher(nh_, "/hmi/led/_wifi");
+  leds_[Turtlebot4LedEnum::BATTERY]->create_publisher(nh_, "/hmi/led/_battery");
+  leds_[Turtlebot4LedEnum::USER_1]->create_publisher(nh_, "/hmi/led/_user1");
+  leds_[Turtlebot4LedEnum::USER_2]->create_publisher(nh_, "/hmi/led/_user2");
 }
 
 void Leds::spin_once()
 {
-    for (uint8_t i = 0; i < Turtlebot4LedEnum::COUNT; i++)
-    {
-        leds_[static_cast<Turtlebot4LedEnum>(i)]->spin_once();
-    }
+  for (uint8_t i = 0; i < Turtlebot4LedEnum::COUNT; i++) {
+    leds_[static_cast<Turtlebot4LedEnum>(i)]->spin_once();
+  }
 }
 
 void Leds::user_led_callback(const turtlebot4_msgs::msg::UserLed user_led_msg)
-{   
-    Turtlebot4LedEnum led = user_led_msg.led == 0 ? USER_1 : USER_2;
-    blink(led, user_led_msg.blink_period, user_led_msg.duty_cycle, 
-            static_cast<Turtlebot4LedColor>(user_led_msg.color));
+{
+  Turtlebot4LedEnum led = user_led_msg.led == 0 ? USER_1 : USER_2;
+  blink(
+    led, user_led_msg.blink_period, user_led_msg.duty_cycle,
+    static_cast<Turtlebot4LedColor>(user_led_msg.color));
 }
 
 void Leds::set_led(Turtlebot4LedEnum led, Turtlebot4LedColor color)
 {
-    if (color == Turtlebot4LedColor::OFF)
-    {
-        blink(led, 1000, 0.0, color);
-    }
-    else 
-    {
-        blink(led, 1000, 1.0, color);
-    }
+  if (color == Turtlebot4LedColor::OFF) {
+    blink(led, 1000, 0.0, color);
+  } else {
+    blink(led, 1000, 1.0, color);
+  }
 }
 
-void Leds::blink(Turtlebot4LedEnum led, uint32_t blink_period_ms, double duty_cycle, Turtlebot4LedColor color)
-  {
-    // Invalid duty cycle
-    if (duty_cycle > 1.0 || duty_cycle < 0.0)
-    {
-      RCLCPP_ERROR(nh_->get_logger(), "Invalid duty cycle %f", duty_cycle);
-      return;
-    }
-
-    if (color > Turtlebot4LedColor::GREEN && leds_[led]->type_ == Turtlebot4LedType::GREEN_ONLY)
-    {
-       RCLCPP_ERROR(nh_->get_logger(), "Invalid color %d for led %d", color, led); 
-       return;
-    }
-
-    leds_[led]->on_period_ms_ = blink_period_ms * duty_cycle;
-    leds_[led]->off_period_ms_ = blink_period_ms * (1 - duty_cycle);
-    leds_[led]->blink_color_ = color;
+void Leds::blink(
+  Turtlebot4LedEnum led, uint32_t blink_period_ms, double duty_cycle,
+  Turtlebot4LedColor color)
+{
+  // Invalid duty cycle
+  if (duty_cycle > 1.0 || duty_cycle < 0.0) {
+    RCLCPP_ERROR(nh_->get_logger(), "Invalid duty cycle %f", duty_cycle);
+    return;
   }
+
+  if (color > Turtlebot4LedColor::GREEN && leds_[led]->type_ == Turtlebot4LedType::GREEN_ONLY) {
+    RCLCPP_ERROR(nh_->get_logger(), "Invalid color %d for led %d", color, led);
+    return;
+  }
+
+  leds_[led]->on_period_ms_ = blink_period_ms * duty_cycle;
+  leds_[led]->off_period_ms_ = blink_period_ms * (1 - duty_cycle);
+  leds_[led]->blink_color_ = color;
+}

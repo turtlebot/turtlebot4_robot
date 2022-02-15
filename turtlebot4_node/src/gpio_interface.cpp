@@ -16,6 +16,8 @@
  * @author Roni Kreinin (rkreinin@clearpathrobotics.com)
  */
 
+#include "turtlebot4_node/gpio_interface.hpp"
+
 #include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -23,17 +25,21 @@
 #include <string.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
+
 #include <iostream>
-#include "turtlebot4_node/gpio_interface.hpp"
+#include <string>
+#include <utility>
 
-using namespace turtlebot4;
+using turtlebot4::GpioInterface;
 
-GpioInterface::GpioInterface(const std::string &gpio_chip) : gpio_chip_(gpio_chip)
+GpioInterface::GpioInterface(const std::string & gpio_chip)
+: gpio_chip_(gpio_chip)
 {
   open_chip();
 }
 
-GpioInterface::GpioInterface(const uint8_t &gpio_chip_number) : gpio_chip_("gpiochip")
+GpioInterface::GpioInterface(const uint8_t & gpio_chip_number)
+: gpio_chip_("gpiochip")
 {
   gpio_chip_ += std::to_string(gpio_chip_number);
   open_chip();
@@ -52,8 +58,7 @@ void GpioInterface::open_chip()
  */
 void GpioInterface::close_chip()
 {
-  for (auto line : lines_)
-  {
+  for (auto line : lines_) {
     gpiod_line_release(line.second);
   }
 
@@ -65,28 +70,20 @@ void GpioInterface::close_chip()
  */
 void GpioInterface::add_line(uint8_t line, GpioInterfaceLineDirection direction)
 {
-  gpiod_line* gpio_line = gpiod_chip_get_line(chip_, line);
+  gpiod_line * gpio_line = gpiod_chip_get_line(chip_, line);
 
-  if (gpio_line != nullptr)
-  {
-    lines_.insert(std::pair<uint8_t, gpiod_line*>(line, gpio_line));
-  }
-  else
-  {
-    std::cerr << "Invalid GPIO Line" << std::endl;    
+  if (gpio_line != nullptr) {
+    lines_.insert(std::pair<uint8_t, gpiod_line *>(line, gpio_line));
+  } else {
+    std::cerr << "Invalid GPIO Line" << std::endl;
     return;
   }
 
-  if (direction == LINE_DIRECTION_INPUT)
-  {
+  if (direction == LINE_DIRECTION_INPUT) {
     gpiod_line_request_input(lines_[line], "Turtlebot4");
-  }
-  else if (direction == LINE_DIRECTION_OUTPUT)
-  {
+  } else if (direction == LINE_DIRECTION_OUTPUT) {
     gpiod_line_request_output(lines_[line], "Turtlebot4", 0);
-  }
-  else
-  {
+  } else {
     std::cerr << "Invalid GPIO Line Direction" << std::endl;
   }
 }

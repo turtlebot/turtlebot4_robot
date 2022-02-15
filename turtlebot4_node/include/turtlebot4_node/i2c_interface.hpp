@@ -16,7 +16,8 @@
  * @author Roni Kreinin (rkreinin@clearpathrobotics.com)
  */
 
-#pragma once
+#ifndef TURTLEBOT4_NODE__I2C_INTERFACE_HPP_
+#define TURTLEBOT4_NODE__I2C_INTERFACE_HPP_
 
 #include <string>
 #include <mutex>
@@ -27,23 +28,25 @@ namespace turtlebot4
 class I2cInterface
 {
 public:
-  I2cInterface(const std::string& i2c_bus);
-  I2cInterface(const uint8_t& i2c_bus_number);
+  explicit I2cInterface(const std::string & i2c_bus);
+  explicit I2cInterface(const uint8_t & i2c_bus_number);
+
   int8_t open_bus();
   int8_t close_bus();
   int8_t set_device_id(uint8_t device_id);
-  int8_t read_from_bus(uint8_t address, void* data, uint32_t count);
-  int8_t read_from_bus(uint8_t device_id, uint8_t address,
-                       void* data, uint32_t count);
+  int8_t read_from_bus(uint8_t address, void * data, uint32_t count);
+  int8_t read_from_bus(
+    uint8_t device_id, uint8_t address,
+    void * data, uint32_t count);
   int8_t write_to_bus(const uint8_t address);
   int8_t write_to_bus(const uint8_t address, uint8_t byte);
-  //int8_t write_to_bus(const uint8_t device_id, const uint8_t address);
-  int8_t write_to_bus(const uint8_t address, void* data, uint32_t count);
-  int8_t write_to_bus(const uint8_t device_id, const uint8_t address,
-                      void* data, uint32_t count);
+  int8_t write_to_bus(const uint8_t address, void * data, uint32_t count);
+  int8_t write_to_bus(
+    const uint8_t device_id, const uint8_t address,
+    void * data, uint32_t count);
   int8_t write_to_bus(const uint8_t device_id, const uint8_t address, uint8_t byte);
-  int8_t write_to_bus(void* data, uint32_t count);
-  bool is_available();
+  int8_t write_to_bus(void * data, uint32_t count);
+
 private:
   std::string i2c_bus_;
   int i2c_fd_;
@@ -51,3 +54,5 @@ private:
 };
 
 }  // namespace turtlebot4
+
+#endif  // TURTLEBOT4_NODE__I2C_INTERFACE_HPP_

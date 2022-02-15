@@ -16,9 +16,19 @@
  * @author Roni Kreinin (rkreinin@clearpathrobotics.com)
  */
 
-#pragma once
+#ifndef TURTLEBOT4_NODE__TURTLEBOT4_HPP_
+#define TURTLEBOT4_NODE__TURTLEBOT4_HPP_
 
 #include <rclcpp/rclcpp.hpp>
+#include <sensor_msgs/msg/battery_state.hpp>
+#include <std_msgs/msg/string.hpp>
+
+#include <chrono>
+#include <map>
+#include <memory>
+#include <string>
+#include <vector>
+
 #include "turtlebot4_node/action.hpp"
 #include "turtlebot4_node/service.hpp"
 #include "turtlebot4_node/display.hpp"
@@ -28,9 +38,6 @@
 #include "turtlebot4_node/gpio_interface.hpp"
 #include "turtlebot4_node/i2c_interface.hpp"
 
-#include <sensor_msgs/msg/battery_state.hpp>
-#include <std_msgs/msg/string.hpp>
-
 #include "irobot_create_msgs/msg/wheel_status.hpp"
 #include "irobot_create_msgs/action/undock.hpp"
 #include "irobot_create_msgs/action/dock_servo.hpp"
@@ -38,10 +45,6 @@
 #include "irobot_create_msgs/srv/e_stop.hpp"
 #include "irobot_create_msgs/srv/robot_power.hpp"
 
-#include <chrono>
-#include <memory>
-#include <string>
-#include <vector>
 
 /** Supported functions
  * Dock
@@ -49,7 +52,7 @@
  * Follow
  * Power off
  * EStop
- */ 
+ */
 
 namespace turtlebot4
 {
@@ -63,7 +66,7 @@ public:
   using WallFollow = irobot_create_msgs::action::WallFollow;
   using EStop = irobot_create_msgs::srv::EStop;
   using Power = irobot_create_msgs::srv::RobotPower;
-  
+
   // Constructor and Destructor
   explicit Turtlebot4(bool use_sim, Turtlebot4Model model);
   virtual ~Turtlebot4() {}
@@ -73,7 +76,8 @@ private:
 
   // Subscription callbacks
   void battery_callback(const sensor_msgs::msg::BatteryState::SharedPtr battery_state_msg);
-  void wheel_status_callback(const irobot_create_msgs::msg::WheelStatus::SharedPtr wheel_status_msg);
+  void wheel_status_callback(
+    const irobot_create_msgs::msg::WheelStatus::SharedPtr wheel_status_msg);
 
   // Function callbacks
   void dock_function_callback();
@@ -112,7 +116,7 @@ private:
 
   // Node
   rclcpp::Node::SharedPtr node_handle_;
-  
+
   // Turtlebot4 Functions
   std::vector<Turtlebot4Button> turtlebot4_buttons_;
   std::vector<Turtlebot4MenuEntry> turtlebot4_menu_entries_;
@@ -129,8 +133,8 @@ private:
   std::unique_ptr<Buttons> buttons_;
 
   // Leds
-  std::unique_ptr<Leds> leds_; 
-  
+  std::unique_ptr<Leds> leds_;
+
   // Actions
   std::unique_ptr<Turtlebot4Action<Dock>> dock_client_;
   std::unique_ptr<Turtlebot4Action<Undock>> undock_client_;
@@ -167,3 +171,5 @@ private:
 };
 
 }  // namespace turtlebot4
+
+#endif  // TURTLEBOT4_NODE__TURTLEBOT4_HPP_

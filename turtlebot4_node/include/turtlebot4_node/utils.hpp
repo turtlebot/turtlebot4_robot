@@ -16,12 +16,14 @@
  * @author Roni Kreinin (rkreinin@clearpathrobotics.com)
  */
 
-#pragma once
+#ifndef TURTLEBOT4_NODE__UTILS_HPP_
+#define TURTLEBOT4_NODE__UTILS_HPP_
 
 #include <string>
 #include <vector>
 #include <functional>
 #include <chrono>
+#include <map>
 
 namespace turtlebot4
 {
@@ -62,7 +64,8 @@ static std::map<Turtlebot4Model, std::string> Turtlebot4ModelName
   {Turtlebot4Model::STANDARD, "Standard"}
 };
 
-typedef std::function<void(void)> turtlebot4_function_callback_t;
+typedef std::function<void (void)> turtlebot4_function_callback_t;
 
+}  // namespace turtlebot4
 
-} // namespace turtlebot4
+#endif  // TURTLEBOT4_NODE__UTILS_HPP_

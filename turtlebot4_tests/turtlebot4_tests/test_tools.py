@@ -13,12 +13,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# 
+#
 # @author Roni Kreinin (rkreinin@clearpathrobotics.com)
 
+import os
 import sys
 import time
-import os 
+
 
 class TestResult:
     # Test results: PASSED, FAILED, WARNING, N/A
@@ -26,10 +27,13 @@ class TestResult:
         self.name = name
         self.result = result
 
+
 class Test:
+
     def __init__(self, name, func):
         self.name = name
         self.func = func
+
 
 class Tester():
     tests = []
@@ -91,6 +95,7 @@ class Tester():
     def run(self):
         self.showTestOptions()
 
+
 # Displays user prompt message, then requests user input of (y/n).
 # Returns TestResult with 'PASSED' or 'FAILED' results corresponding to user input.
 def userInputTestResults(prompt, test_case):
@@ -105,6 +110,7 @@ def userInputTestResults(prompt, test_case):
         print('Invalid input')
         return userInputTestResults(prompt, test_case)
 
+
 # Returns TestResult with 'PASSED' or 'FAILED' results based on value of boolean input
 def boolTestResults(bool_input, test_case):
     result = ''
@@ -116,12 +122,14 @@ def boolTestResults(bool_input, test_case):
 
     return TestResult(test_case, result)
 
+
 # Returns TestResults with 'N/A' for test runs that failed to execute
 def notApplicableTestResult(test_case):
     result = 'N/A'
     message = '%s failed to execute' % test_case
 
     return TestResult(message, result)
+
 
 def printTestResults(name, results):
     # Format
@@ -137,14 +145,15 @@ def printTestResults(name, results):
             result_string = '\033[1;32;40m PASSED'
         elif test.result == 'FAILED':
             result_string = '\033[1;31;40m FAILED'
-        elif test.result == 'WARNING': 
+        elif test.result == 'WARNING':
             result_string = '\033[1;33;40m WARNING'
         elif test.result == 'N/A':
             result_string = '\033[1;34;40m N/A'
         else:
-            print('Invalid test result for {}'.format(name_string))        
-            continue 
+            print('Invalid test result for {}'.format(name_string))
+            continue
         print('{:<30s}{:>20s}\033[0;39;49m'.format(name_string, result_string))
+
 
 def logTestResults(file, name, results):
     os.makedirs(os.path.dirname(file), exist_ok=True)
@@ -158,4 +167,3 @@ def logTestResults(file, name, results):
         f.write(output_result)
 
     f.close()
-

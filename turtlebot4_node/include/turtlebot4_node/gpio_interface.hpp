@@ -16,19 +16,23 @@
  * @author Roni Kreinin (rkreinin@clearpathrobotics.com)
  */
 
-#pragma once
+#ifndef TURTLEBOT4_NODE__GPIO_INTERFACE_HPP_
+#define TURTLEBOT4_NODE__GPIO_INTERFACE_HPP_
+
+#include <linux/gpio.h>
+#include <gpiod.h>
 
 #include <string>
 #include <mutex>
 #include <memory>
 #include <map>
-#include <linux/gpio.h>
-#include <gpiod.h>
+
 
 namespace turtlebot4
 {
 
-enum GpioInterfaceLineDirection{
+enum GpioInterfaceLineDirection
+{
   LINE_DIRECTION_INPUT = GPIOD_LINE_DIRECTION_INPUT,
   LINE_DIRECTION_OUTPUT = GPIOD_LINE_DIRECTION_OUTPUT
 };
@@ -36,30 +40,25 @@ enum GpioInterfaceLineDirection{
 class GpioInterface
 {
 public:
-  GpioInterface(const std::string& gpio_chip);
-  GpioInterface(const uint8_t& gpio_chip_number);
+  explicit GpioInterface(const std::string & gpio_chip);
+  explicit GpioInterface(const uint8_t & gpio_chip_number);
 
   void write(uint8_t line, uint8_t value);
   uint8_t read(uint8_t line);
 
   void open_chip();
   void close_chip();
-  
+
   void add_line(uint8_t line, GpioInterfaceLineDirection direction);
+
 private:
-  
   std::string gpio_chip_;
 
   gpiod_chip * chip_;
 
-  std::map<uint8_t, gpiod_line*> lines_;
-
-  // int gpio_fd_;
-
-  // struct gpiohandle_request req_;
-  // struct gpiohandle_data data_;
-
-  // std::mutex gpio_mutex_;
+  std::map<uint8_t, gpiod_line *> lines_;
 };
 
 }  // namespace turtlebot4
+
+#endif  // TURTLEBOT4_NODE__GPIO_INTERFACE_HPP_

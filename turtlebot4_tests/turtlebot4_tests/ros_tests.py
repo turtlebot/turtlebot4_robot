@@ -13,35 +13,40 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# 
+#
 # @author Roni Kreinin (rkreinin@clearpathrobotics.com)
 
-# Description: 
-#   This script exposes a set of useful tests at the ROS-level, via ROS topics, to verify the 
-#   functionality of core features. In addition, these tests together serve as a useful robot-level 
-#   diagnostic tool, be identifying the root cause of problems, or at the very least, narrowing down 
-#   on where the root cause(s) may be. 
+# Description:
+#   This script exposes a set of useful tests at the ROS-level,
+#   via ROS topics, to verify the functionality of core features.
+#   In addition, these tests together serve as a useful robot-level
+#   diagnostic tool, be identifying the root cause of problems,
+#   or at the very least, narrowing down on where the root cause(s) may be.
 #
 # Usage:
 #   ros2 run turtlebot4_tests ros_tests
 
-import time
-import threading
-import rclpy
-import subprocess
 import os
 from os.path import expanduser
 
-from rclpy.node import Node
-from rclpy.action import ActionClient
-from rclpy.qos import qos_profile_sensor_data, qos_profile_system_default
-from turtlebot4_tests.test_tools import Tester
-from turtlebot4_tests.test_tools import userInputTestResults, boolTestResults
-from turtlebot4_tests.test_tools import printTestResults, notApplicableTestResult, logTestResults
-from irobot_create_msgs.msg import LightringLeds, Dock, InterfaceButtons
+import subprocess
+import threading
+import time
+
 from irobot_create_msgs.action import DockServo, Undock
-from turtlebot4_msgs.msg import UserLed, UserButton
+from irobot_create_msgs.msg import Dock, InterfaceButtons, LightringLeds
+
+import rclpy
+from rclpy.action import ActionClient
+from rclpy.node import Node
+from rclpy.qos import qos_profile_sensor_data, qos_profile_system_default
+
 from std_msgs.msg import String
+
+from turtlebot4_msgs.msg import UserButton, UserLed
+
+from turtlebot4_tests.test_tools import boolTestResults, logTestResults, notApplicableTestResult
+from turtlebot4_tests.test_tools import printTestResults, Tester, userInputTestResults
 
 
 class Turtlebot4RosTests(Node):
@@ -49,17 +54,22 @@ class Turtlebot4RosTests(Node):
     def __init__(self):
         super().__init__('turtlebot4_ros_tests')
 
-        self.results_dir = expanduser('~') + '/turtlebot4_test_results/' + time.strftime("%Y_%m_%d-%H_%M_%S")
+        self.results_dir = expanduser('~') + \
+            '/turtlebot4_test_results/' + \
+            time.strftime('%Y_%m_%d-%H_%M_%S')
+
         self.log_file_name = self.results_dir + '/turtlebot4_test_log.txt'
 
         os.makedirs(os.path.dirname(self.log_file_name), exist_ok=True)
 
-        print("Saving results to " + self.results_dir)
+        print('Saving results to ' + self.results_dir)
         # Record rosbag
-        self.rosbag_thread = threading.Thread(target=subprocess.run, args=(["ros2", "bag", "record", "-o", self.results_dir + "/rosbag2", "-a"],), 
-                                              kwargs={'stdout': subprocess.DEVNULL, 'stderr': subprocess.DEVNULL}, daemon=True, )
+        self.rosbag_thread = threading.Thread(
+            target=subprocess.run,
+            args=(['ros2', 'bag', 'record', '-o', self.results_dir + '/rosbag2', '-a'],),
+            kwargs={'stdout': subprocess.DEVNULL, 'stderr': subprocess.DEVNULL}, daemon=True,)
         self.rosbag_thread.start()
-        
+
         self.tester = Tester()
 
         self.tester.addTest('Light Ring Test', self.lightRingTest)
@@ -73,7 +83,7 @@ class Turtlebot4RosTests(Node):
         results = []
         # Delay between publishing messages and requesting user input
         response_delay = 1
-        print("Testing Create3 Light Ring... \n")
+        print('Testing Create3 Light Ring... \n')
 
         pub = self.create_publisher(LightringLeds, '/cmd_lightring', qos_profile_sensor_data)
         time.sleep(response_delay)
@@ -131,7 +141,7 @@ class Turtlebot4RosTests(Node):
 
         time.sleep(response_delay)
         results.append(userInputTestResults('Did all lights turn white?', 'All White'))
-        
+
         # Set all leds to off
         for led in msg.leds:
             led.red = 0
@@ -161,31 +171,30 @@ class Turtlebot4RosTests(Node):
         results = []
         # Delay between publishing messages and requesting user input
         response_delay = 0.5
-        print("Testing Create3 Buttons... \n")
+        print('Testing Create3 Buttons... \n')
 
         self.create_button_msg = InterfaceButtons()
 
-        create_button_sub = self.create_subscription(InterfaceButtons, 
+        create_button_sub = self.create_subscription(InterfaceButtons,
                                                      '/interface_buttons',
-                                                     self.createButtonCallback, 
+                                                     self.createButtonCallback,
                                                      qos_profile_sensor_data)
         time.sleep(response_delay)
 
-        print("Press Create3 Button 1")
+        print('Press Create3 Button 1')
         while not self.create_button_msg.button_1.is_pressed:
             pass
         results.append(boolTestResults(True, 'Create Button 1'))
 
-        print("Press Create3 Button Power")
+        print('Press Create3 Button Power')
         while not self.create_button_msg.button_power.is_pressed:
             pass
         results.append(boolTestResults(True, 'Create Button Power'))
 
-        print("Press Create3 Button 2")
+        print('Press Create3 Button 2')
         while not self.create_button_msg.button_2.is_pressed:
             pass
         results.append(boolTestResults(True, 'Create Button 2'))
-
 
         self.destroy_subscription(create_button_sub)
         printTestResults('Create3 Button Test', results)
@@ -196,7 +205,7 @@ class Turtlebot4RosTests(Node):
         results = []
         # Delay between publishing messages and requesting user input
         response_delay = 1
-        print("Testing User LEDs... \n")
+        print('Testing User LEDs... \n')
 
         user_led_pub = self.create_publisher(UserLed, '/hmi/led/set', qos_profile_sensor_data)
         time.sleep(response_delay)
@@ -259,24 +268,25 @@ class Turtlebot4RosTests(Node):
         printTestResults('HMI Test', results)
         logTestResults(self.log_file_name, 'Lighting Test', results)
         return True
-    
+
     def displayTest(self):
         results = []
         # Delay between publishing messages and requesting user input
         response_delay = 1
-        print("Testing the display... \n")
+        print('Testing the display... \n')
 
         display_pub = self.create_publisher(String, '/hmi/display/set', qos_profile_sensor_data)
         time.sleep(response_delay)
 
         msg = String()
 
-        msg.data = "Turtlebot4 Display Test"
+        msg.data = 'Turtlebot4 Display Test'
 
         display_pub.publish(msg)
         time.sleep(response_delay)
 
-        results.append(userInputTestResults('Does the display show \'Turtlebot4 Display Test\'?', 'Display Message'))
+        results.append(userInputTestResults("Does the display show 'Turtlebot4 Display Test'?",
+                                            'Display Message'))
 
         self.destroy_publisher(display_pub)
 
@@ -291,18 +301,18 @@ class Turtlebot4RosTests(Node):
         results = []
         # Delay between publishing messages and requesting user input
         response_delay = 0.5
-        print("Testing User Buttons... \n")
+        print('Testing User Buttons... \n')
 
         self.button_msg = UserButton()
 
-        user_button_sub = self.create_subscription(UserButton, 
-                                                '/hmi/buttons',
-                                                self.userButtonCallback, 
-                                                qos_profile_system_default)
+        user_button_sub = self.create_subscription(UserButton,
+                                                   '/hmi/buttons',
+                                                   self.userButtonCallback,
+                                                   qos_profile_system_default)
         time.sleep(response_delay)
 
         for i in range(0, 4):
-            print("Press User Button " + str(i + 1))
+            print('Press User Button ' + str(i + 1))
             # Wait for button press
             while not self.button_msg.button[i]:
                 pass
@@ -322,9 +332,9 @@ class Turtlebot4RosTests(Node):
         results = []
         self.is_docked = False
 
-        dock_sub = self.create_subscription(Dock, 
+        dock_sub = self.create_subscription(Dock,
                                             '/dock',
-                                            self.dockCallback, 
+                                            self.dockCallback,
                                             qos_profile_sensor_data)
         undock_action_client = ActionClient(self, Undock, '/undock')
         dock_action_client = ActionClient(self, DockServo, '/dock')
@@ -334,7 +344,7 @@ class Turtlebot4RosTests(Node):
         time.sleep(1)
 
         if not self.is_docked:
-            print("Place the robot on the dock")
+            print('Place the robot on the dock')
 
         # Wait for robot to be docked
         while not self.is_docked:
@@ -342,7 +352,7 @@ class Turtlebot4RosTests(Node):
 
         time.sleep(3)
 
-        print("Undocking...")
+        print('Undocking...')
 
         undock_action_client.wait_for_server()
         undock_goal_result = undock_action_client.send_goal(undock_goal_msg)
@@ -351,11 +361,11 @@ class Turtlebot4RosTests(Node):
 
         # Undocking failed
         if undock_goal_result.result.is_docked:
-            print("Undocking failed, skipping docking")
+            print('Undocking failed, skipping docking')
             results.append(notApplicableTestResult('Docking'))
         else:
             time.sleep(2)
-            print("Docking...")
+            print('Docking...')
             dock_action_client.wait_for_server()
             goal_result = dock_action_client.send_goal(dock_goal_msg)
             results.append(boolTestResults(goal_result.result.is_docked, 'Docking'))
@@ -365,6 +375,7 @@ class Turtlebot4RosTests(Node):
 
         self.destroy_subscription(dock_sub)
         return True
+
 
 def main(args=None):
     rclpy.init(args=args)
@@ -383,7 +394,7 @@ def main(args=None):
 
     tests.rosbag_thread.join()
     thread.join()
-    
+
 
 if __name__ == '__main__':
     main()

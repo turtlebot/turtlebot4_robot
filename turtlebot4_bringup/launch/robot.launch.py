@@ -12,26 +12,26 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# 
+#
 # @author Roni Kreinin (rkreinin@clearpathrobotics.com)
 
-import os
 
 from ament_index_python.packages import get_package_share_directory
+
 from launch import LaunchDescription
 from launch.actions.declare_launch_argument import DeclareLaunchArgument
-from launch.conditions import LaunchConfigurationEquals
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+
 from launch_ros.actions import Node
 
 
 ARGUMENTS = [
     DeclareLaunchArgument('use_sim', default_value='false',
-                                    choices=['true', 'false'],
-                                    description='use_sim'),
+                          choices=['true', 'false'],
+                          description='use_sim'),
     DeclareLaunchArgument('model', default_value='standard',
-                                    choices=['standard', 'lite'],
-                                    description='Turtlebot4 Model'),                      
+                          choices=['standard', 'lite'],
+                          description='Turtlebot4 Model'),
 ]
 
 

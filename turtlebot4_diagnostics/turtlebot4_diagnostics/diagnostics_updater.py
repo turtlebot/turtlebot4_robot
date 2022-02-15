@@ -14,26 +14,30 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# 
+#
 # @author Roni Kreinin (rkreinin@clearpathrobotics.com)
 
 
 from diagnostic_msgs.msg import DiagnosticStatus
-import diagnostic_updater
+
+from diagnostic_updater import FrequencyStatusParam, HeaderlessTopicDiagnostic, Updater
+
+from irobot_create_msgs.msg import Dock, HazardDetectionVector, Mouse, WheelStatus
 
 import rclpy
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 
-from sensor_msgs.msg import BatteryState, LaserScan, Image, Imu
-from irobot_create_msgs.msg import WheelStatus, Dock, HazardDetectionVector, Mouse
+from sensor_msgs.msg import BatteryState, Image, Imu, LaserScan
 
-hazards_type = { 0: 'BACKUP_LIMIT',
-                 1: 'BUMP',
-                 2: 'CLIFF',
-                 3: 'STALL',
-                 4: 'WHEEL_DROP',
-                 5: 'OBJECT_PROXIMITY' }
+
+hazards_type = {0: 'BACKUP_LIMIT',
+                1: 'BUMP',
+                2: 'CLIFF',
+                3: 'STALL',
+                4: 'WHEEL_DROP',
+                5: 'OBJECT_PROXIMITY'}
+
 
 class Turtlebot4DiagnosticUpdater(Node):
 
@@ -41,8 +45,8 @@ class Turtlebot4DiagnosticUpdater(Node):
         super().__init__('turtlebot4_diagnostics')
 
         # Create updater
-        self.updater = diagnostic_updater.Updater(self)
-        self.updater.setHardwareID("Turtlebot4")
+        self.updater = Updater(self)
+        self.updater.setHardwareID('Turtlebot4')
 
         # Subscribe to topics
         self.battery_sub = self.create_subscription(
@@ -142,20 +146,40 @@ class Turtlebot4DiagnosticUpdater(Node):
         self.updater.add('Hazard Detections', self.check_hazard_detections)
 
         # Add Frequency status
-        self.lidar_freq =           diagnostic_updater.HeaderlessTopicDiagnostic('/scan', self.updater,
-                                        diagnostic_updater.FrequencyStatusParam(self.lidar_freq_bounds, 0.1, 10))
-        self.left_image_freq =      diagnostic_updater.HeaderlessTopicDiagnostic('/left/image', self.updater,
-                                        diagnostic_updater.FrequencyStatusParam(self.camera_freq_bounds, 0.1, 10))
-        self.right_image_freq =     diagnostic_updater.HeaderlessTopicDiagnostic('/right/image', self.updater,
-                                        diagnostic_updater.FrequencyStatusParam(self.camera_freq_bounds, 0.1, 10))
-        self.stereo_depth_freq =    diagnostic_updater.HeaderlessTopicDiagnostic('/stereo/depth', self.updater,
-                                        diagnostic_updater.FrequencyStatusParam(self.camera_freq_bounds, 0.1, 10))
-        self.color_image_freq =     diagnostic_updater.HeaderlessTopicDiagnostic('/color/image', self.updater,
-                                        diagnostic_updater.FrequencyStatusParam(self.camera_freq_bounds, 0.1, 10))
-        self.imu_freq =             diagnostic_updater.HeaderlessTopicDiagnostic('/imu', self.updater,
-                                        diagnostic_updater.FrequencyStatusParam(self.imu_freq_bounds, 0.1, 10))
-        self.mouse_freq =           diagnostic_updater.HeaderlessTopicDiagnostic('/mouse', self.updater,
-                                        diagnostic_updater.FrequencyStatusParam(self.mouse_freq_bounds, 0.1, 10))
+        self.lidar_freq = HeaderlessTopicDiagnostic('/scan',
+                                                    self.updater,
+                                                    FrequencyStatusParam(
+                                                        self.lidar_freq_bounds, 0.1, 10))
+
+        self.left_image_freq = HeaderlessTopicDiagnostic('/left/image',
+                                                         self.updater,
+                                                         FrequencyStatusParam(
+                                                            self.camera_freq_bounds, 0.1, 10))
+
+        self.right_image_freq = HeaderlessTopicDiagnostic('/right/image',
+                                                          self.updater,
+                                                          FrequencyStatusParam(
+                                                              self.camera_freq_bounds, 0.1, 10))
+
+        self.stereo_depth_freq = HeaderlessTopicDiagnostic('/stereo/depth',
+                                                           self.updater,
+                                                           FrequencyStatusParam(
+                                                               self.camera_freq_bounds, 0.1, 10))
+
+        self.color_image_freq = HeaderlessTopicDiagnostic('/color/image',
+                                                          self.updater,
+                                                          FrequencyStatusParam(
+                                                              self.camera_freq_bounds, 0.1, 10))
+
+        self.imu_freq = HeaderlessTopicDiagnostic('/imu',
+                                                  self.updater,
+                                                  FrequencyStatusParam(
+                                                      self.imu_freq_bounds, 0.1, 10))
+
+        self.mouse_freq = HeaderlessTopicDiagnostic('/mouse',
+                                                    self.updater,
+                                                    FrequencyStatusParam(
+                                                        self.mouse_freq_bounds, 0.1, 10))
 
         self.updater.force_update()
 
@@ -175,7 +199,7 @@ class Turtlebot4DiagnosticUpdater(Node):
         elif self.battery_voltage > 13.0:
             stat.summary(DiagnosticStatus.WARN, 'Low')
         else:
-            stat.summary(DiagnosticStatus.ERROR, 'Critical') 
+            stat.summary(DiagnosticStatus.ERROR, 'Critical')
         stat.add('Battery Voltage', '%.2f' % self.battery_voltage)
         return stat
 
@@ -240,10 +264,10 @@ class Turtlebot4DiagnosticUpdater(Node):
 
     def right_image_callback(self, msg):
         self.right_image_freq.tick()
-    
+
     def stereo_depth_callback(self, msg):
         self.stereo_depth_freq.tick()
-    
+
     def color_image_callback(self, msg):
         self.color_image_freq.tick()
 

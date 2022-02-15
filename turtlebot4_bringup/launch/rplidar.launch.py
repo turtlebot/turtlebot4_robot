@@ -11,19 +11,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# 
+#
 # @author Roni Kreinin (rkreinin@clearpathrobotics.com)
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.conditions import LaunchConfigurationEquals
+
 from launch_ros.actions import Node
 
 ARGUMENTS = [
     DeclareLaunchArgument('model', default_value='standard',
-                                    choices=['standard', 'lite'],
-                                    description='Turtlebot4 Model'), 
+                          choices=['standard', 'lite'],
+                          description='Turtlebot4 Model'),
 ]
+
 
 def generate_launch_description():
 
@@ -44,7 +46,7 @@ def generate_launch_description():
             arguments=['0', '0', '0.07', '1.5707', '0.0', '0.0', 'base_link', 'laser'],
             condition=LaunchConfigurationEquals('model', 'lite')
         )
-    
+
     rplidar_node = Node(
             name='rplidar_composition',
             package='rplidar_ros',
