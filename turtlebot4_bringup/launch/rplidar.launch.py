@@ -65,3 +65,5 @@ def generate_launch_description():
     ld.add_action(rplidar_lite_stf)
     ld.add_action(rplidar_standard_stf)
     ld.add_action(rplidar_node)
+
+    return ld
