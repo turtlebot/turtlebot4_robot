@@ -16,7 +16,7 @@
  * @author Roni Kreinin (rkreinin@clearpathrobotics.com)
  */
 
-#include "turtlebot4_node/i2c_interface.hpp"
+#include "turtlebot4_base/i2c_interface.hpp"
 
 #include <errno.h>
 #include <fcntl.h>
@@ -31,7 +31,7 @@
 #include <string>
 #include <iostream>
 
-using turtlebot4::I2cInterface;
+using turtlebot4_base::I2cInterface;
 
 I2cInterface::I2cInterface(const std::string & i2c_bus)
 : i2c_bus_(i2c_bus)

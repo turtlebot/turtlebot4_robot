@@ -16,7 +16,7 @@
  * @author Roni Kreinin (rkreinin@clearpathrobotics.com)
  */
 
-#include "turtlebot4_node/gpio_interface.hpp"
+#include "turtlebot4_base/gpio_interface.hpp"
 
 #include <errno.h>
 #include <fcntl.h>
@@ -30,7 +30,7 @@
 #include <string>
 #include <utility>
 
-using turtlebot4::GpioInterface;
+using turtlebot4_base::GpioInterface;
 
 GpioInterface::GpioInterface(const std::string & gpio_chip)
 : gpio_chip_(gpio_chip)

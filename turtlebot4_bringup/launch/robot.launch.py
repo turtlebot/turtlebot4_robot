@@ -20,6 +20,7 @@ from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch.actions.declare_launch_argument import DeclareLaunchArgument
+from launch.conditions import LaunchConfigurationEquals
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
 from launch_ros.actions import Node
@@ -46,11 +47,19 @@ def generate_launch_description():
     turtlebot4_node = Node(
         package='turtlebot4_node',
         executable='turtlebot4_node',
-        parameters=[turtlebot4_param_yaml_file],
-        arguments=['--use_sim', LaunchConfiguration('use_sim'),
-                   '--model', LaunchConfiguration('model')],
+        parameters=[turtlebot4_param_yaml_file,
+                    {'model': LaunchConfiguration('model')}],
         output='screen')
+
+    turtlebot4_base_node = Node(
+        package='turtlebot4_base',
+        executable='turtlebot4_base_node',
+        parameters=[turtlebot4_param_yaml_file],
+        output='screen',
+        condition=LaunchConfigurationEquals('model', 'standard')
+    )
 
     ld = LaunchDescription(ARGUMENTS)
     ld.add_action(turtlebot4_node)
+    ld.add_action(turtlebot4_base_node)
     return ld

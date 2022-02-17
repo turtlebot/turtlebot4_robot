@@ -16,8 +16,8 @@
  * @author Roni Kreinin (rkreinin@clearpathrobotics.com)
  */
 
-#ifndef TURTLEBOT4_NODE__UTILS_HPP_
-#define TURTLEBOT4_NODE__UTILS_HPP_
+#ifndef TURTLEBOT4_BASE__UTILS_HPP_
+#define TURTLEBOT4_BASE__UTILS_HPP_
 
 #include <string>
 #include <vector>
@@ -25,7 +25,7 @@
 #include <chrono>
 #include <map>
 
-namespace turtlebot4
+namespace turtlebot4_base
 {
 
 #define CREATE3_BUTTON_COUNT 3
@@ -50,22 +50,6 @@ namespace turtlebot4
 
 #define HMI_DISPLAY_RESET_PIN     2
 
-#define UNKNOWN_IP "UNKNOWN"
+}  // namespace turtlebot4_base
 
-enum class Turtlebot4Model
-{
-  LITE,
-  STANDARD
-};
-
-static std::map<Turtlebot4Model, std::string> Turtlebot4ModelName
-{
-  {Turtlebot4Model::LITE, "Lite"},
-  {Turtlebot4Model::STANDARD, "Standard"}
-};
-
-typedef std::function<void (void)> turtlebot4_function_callback_t;
-
-}  // namespace turtlebot4
-
-#endif  // TURTLEBOT4_NODE__UTILS_HPP_
+#endif  // TURTLEBOT4_BASE__UTILS_HPP_

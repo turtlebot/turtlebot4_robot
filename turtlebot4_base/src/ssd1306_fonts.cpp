@@ -26,9 +26,9 @@
  * @author Roni Kreinin (rkreinin@clearpathrobotics.com)
  */
 
-#include "turtlebot4_node/ssd1306_fonts.hpp"
+#include "turtlebot4_base/ssd1306_fonts.hpp"
 
-namespace turtlebot4
+namespace turtlebot4_base
 {
 
 #ifdef SSD1306_INCLUDE_FONT_7x10

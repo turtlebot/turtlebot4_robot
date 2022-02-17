@@ -16,13 +16,13 @@
  * @author Roni Kreinin (rkreinin@clearpathrobotics.com)
  */
 
-#ifndef TURTLEBOT4_NODE__I2C_INTERFACE_HPP_
-#define TURTLEBOT4_NODE__I2C_INTERFACE_HPP_
+#ifndef TURTLEBOT4_BASE__I2C_INTERFACE_HPP_
+#define TURTLEBOT4_BASE__I2C_INTERFACE_HPP_
 
 #include <string>
 #include <mutex>
 
-namespace turtlebot4
+namespace turtlebot4_base
 {
 
 class I2cInterface
@@ -53,6 +53,6 @@ private:
   std::mutex i2c_mutex_;
 };
 
-}  // namespace turtlebot4
+}  // namespace turtlebot4_base
 
-#endif  // TURTLEBOT4_NODE__I2C_INTERFACE_HPP_
+#endif  // TURTLEBOT4_BASE__I2C_INTERFACE_HPP_
