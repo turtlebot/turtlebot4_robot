@@ -28,10 +28,12 @@
 #include "turtlebot4_msgs/msg/user_button.hpp"
 #include "turtlebot4_base/gpio_interface.hpp"
 
+#include "turtlebot4_node/utils.hpp"
+
 namespace turtlebot4_base
 {
 
-#define HMI_BUTTON_COUNT 4
+using turtlebot4::HMI_BUTTON_COUNT;
 
 class Buttons
 {

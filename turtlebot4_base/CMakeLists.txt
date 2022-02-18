@@ -24,6 +24,7 @@ find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(irobot_create_msgs REQUIRED)
 find_package(turtlebot4_msgs REQUIRED)
+find_package(turtlebot4_node REQUIRED)
 
 find_library(GPIOD_LIBRARY NAMES libgpiod.so)
 
@@ -53,6 +54,7 @@ set(DEPENDENCIES
   "sensor_msgs"
   "irobot_create_msgs"
   "turtlebot4_msgs"
+  "turtlebot4_node"
 )
 
 target_link_libraries(${PROJECT_NAME}_lib ${GPIOD_LIBRARY})

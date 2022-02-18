@@ -28,36 +28,16 @@
 #include "turtlebot4_msgs/msg/user_led.hpp"
 #include "turtlebot4_base/gpio_interface.hpp"
 
+#include "turtlebot4_node/utils.hpp"
+
 #include "std_msgs/msg/int32.hpp"
 
 namespace turtlebot4_base
 {
 
-enum Turtlebot4LedEnum
-{
-  POWER,
-  MOTORS,
-  COMMS,
-  WIFI,
-  BATTERY,
-  USER_1,
-  USER_2,
-  COUNT
-};
-
-enum Turtlebot4LedType
-{
-  GREEN_ONLY,
-  RED_GREEN
-};
-
-enum Turtlebot4LedColor: uint8_t
-{
-  OFF = 0,
-  GREEN = 1,
-  RED = 2,
-  YELLOW = 3
-};
+using turtlebot4::Turtlebot4LedType;
+using turtlebot4::Turtlebot4LedColor;
+using turtlebot4::Turtlebot4LedEnum;
 
 struct Turtlebot4Led
 {
@@ -68,7 +48,7 @@ struct Turtlebot4Led
 
   // Green Only constructor
   Turtlebot4Led(std::shared_ptr<GpioInterface> gpio_interface, uint8_t green_pin)
-  : type_(GREEN_ONLY),
+  : type_(Turtlebot4LedType::GREEN_ONLY),
     gpio_interface_(gpio_interface),
     green_pin_(green_pin)
   {
@@ -78,7 +58,7 @@ struct Turtlebot4Led
   // Red Green constructor
   Turtlebot4Led(std::shared_ptr<GpioInterface> gpio_interface,
     uint8_t green_pin, uint8_t red_pin)
-  : type_(RED_GREEN),
+  : type_(Turtlebot4LedType::RED_GREEN),
     gpio_interface_(gpio_interface),
     green_pin_(green_pin),
     red_pin_(red_pin)

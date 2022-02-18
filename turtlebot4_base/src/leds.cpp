@@ -21,6 +21,7 @@
 #include <memory>
 
 using turtlebot4_base::Leds;
+using turtlebot4::Turtlebot4LedEnum;
 
 Leds::Leds(
   std::shared_ptr<rclcpp::Node> & nh,
