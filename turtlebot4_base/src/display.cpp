@@ -56,6 +56,7 @@ Display::Display(
 
 void Display::display_callback(const turtlebot4_msgs::msg::UserDisplay::SharedPtr msg)
 {
+  oled_.Fill(Black);
   // Draw header
   oled_.SetCursor(0, 0);
   oled_.WriteString(msg->ip, SSD1306_HEADER_FONT, White);

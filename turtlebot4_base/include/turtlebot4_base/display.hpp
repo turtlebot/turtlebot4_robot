@@ -26,7 +26,6 @@
 #include <vector>
 
 #include "turtlebot4_base/ssd1306.hpp"
-#include "turtlebot4_base/utils.hpp"
 #include "turtlebot4_base/buttons.hpp"
 #include "turtlebot4_msgs/msg/user_display.hpp"
 
@@ -38,7 +37,7 @@ class Display
 {
 public:
   // Constructor and Destructor
-  explicit Display(
+  Display(
     std::shared_ptr<rclcpp::Node> & nh, 
     std::shared_ptr<I2cInterface> i2c,
     std::shared_ptr<GpioInterface> gpio);

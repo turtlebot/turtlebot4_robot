@@ -27,7 +27,6 @@
 
 #include "turtlebot4_msgs/msg/user_led.hpp"
 #include "turtlebot4_base/gpio_interface.hpp"
-#include "turtlebot4_base/utils.hpp"
 
 #include "std_msgs/msg/int32.hpp"
 
@@ -67,6 +66,7 @@ struct Turtlebot4Led
   uint8_t green_pin_, red_pin_;
   rclcpp::Subscription<std_msgs::msg::Int32>::SharedPtr led_sub_;
 
+  // Green Only constructor
   Turtlebot4Led(std::shared_ptr<GpioInterface> gpio_interface, uint8_t green_pin)
   : type_(GREEN_ONLY),
     gpio_interface_(gpio_interface),
@@ -75,6 +75,7 @@ struct Turtlebot4Led
     gpio_interface->add_line(green_pin, LINE_DIRECTION_OUTPUT);
   }
 
+  // Red Green constructor
   Turtlebot4Led(std::shared_ptr<GpioInterface> gpio_interface,
     uint8_t green_pin, uint8_t red_pin)
   : type_(RED_GREEN),
@@ -86,7 +87,7 @@ struct Turtlebot4Led
     gpio_interface->add_line(red_pin, LINE_DIRECTION_OUTPUT);
   }
 
-  void create_subscriber(rclcpp::Node::SharedPtr nh, std::string topic)
+  void create_subscription(rclcpp::Node::SharedPtr nh, std::string topic)
   {
     led_sub_ = nh->create_subscription<std_msgs::msg::Int32>(topic, rclcpp::QoS(rclcpp::KeepLast(10)), std::bind(&Turtlebot4Led::led_callback, this, std::placeholders::_1));
   }
@@ -152,9 +153,6 @@ private:
   std::map<Turtlebot4LedEnum, std::shared_ptr<Turtlebot4Led>> leds_;
 
   std::shared_ptr<GpioInterface> gpio_interface_;
-
-  // Simulation
-  bool use_sim_;
 };
 
 }  // namespace turtlebot4_base

@@ -33,7 +33,7 @@ Turtlebot4::Turtlebot4()
 : Node("turtlebot4_base_node",
     rclcpp::NodeOptions().use_intra_process_comms(true))
 {
-  RCLCPP_INFO(get_logger(), "Init Turtlebot4 Base Node Main");
+  RCLCPP_INFO(get_logger(), "Turtlebot4 Base Node Running");
 
   // Create node handle
   node_handle_ = std::shared_ptr<::rclcpp::Node>(this, [](::rclcpp::Node *) {});

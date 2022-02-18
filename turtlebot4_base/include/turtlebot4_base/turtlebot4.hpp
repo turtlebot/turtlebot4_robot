@@ -32,7 +32,6 @@
 #include "turtlebot4_base/display.hpp"
 #include "turtlebot4_base/buttons.hpp"
 #include "turtlebot4_base/leds.hpp"
-#include "turtlebot4_base/utils.hpp"
 #include "turtlebot4_base/gpio_interface.hpp"
 #include "turtlebot4_base/i2c_interface.hpp"
 
@@ -60,9 +59,8 @@ private:
   // Node
   rclcpp::Node::SharedPtr node_handle_;
 
-  // Turtlebot4 Functions
+  // Interfaces
   std::shared_ptr<GpioInterface> gpiochip0_;
-
   std::shared_ptr<I2cInterface> i2c3_;
 
   // Display
@@ -74,7 +72,7 @@ private:
   // Leds
   std::unique_ptr<Leds> leds_;
 
-  // Timers
+  // Timer
   rclcpp::TimerBase::SharedPtr buttons_timer_;
 };
 

@@ -59,10 +59,7 @@ void Ssd1306::WriteCommand(uint8_t byte)
   buf.command.control = 0x00;
   buf.command.byte = byte;
   auto ret = i2c_interface_->write_to_bus(buf.raw, sizeof(buf));
-  if (ret < 0) {
-    std::cerr << "Failed to write command" << std::endl;
-    Reset();
-  }
+  HandleRet(ret);
 }
 
 // Send data
@@ -72,10 +69,7 @@ void Ssd1306::WriteData(uint8_t * buffer, size_t buff_size)
   buf.page.control = 0x40;
   memcpy(buf.page.data, buffer, buff_size);
   auto ret = i2c_interface_->write_to_bus(buf.raw, sizeof(buf));
-  if (ret < 0) {
-    std::cerr << "Failed to write data" << std::endl;
-    Reset();
-  }
+  HandleRet(ret);
 }
 
 void Ssd1306::WritePage(uint8_t page)
@@ -84,6 +78,19 @@ void Ssd1306::WritePage(uint8_t page)
   WriteCommand(SSD1306_SETLOWCOLUMN);
   WriteCommand(SSD1306_SETHIGHCOLUMN);
   WriteData(&buffer_[SSD1306_WIDTH * page], SSD1306_WIDTH);
+}
+
+void Ssd1306::HandleRet(int8_t ret)
+{
+  if (ret == 0) {
+    error_count_ = 0;
+  } else {
+    error_count_++;
+    if (error_count_ >= 3) {
+      std::cerr << "I2C Bus Error. Resetting." << std::endl;
+      Reset();
+    }
+  }
 }
 
 /* Fills the Screenbuffer with values from a given buffer of a fixed length */

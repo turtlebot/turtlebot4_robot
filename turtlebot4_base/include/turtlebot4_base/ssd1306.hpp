@@ -247,8 +247,11 @@ public:
   uint16_t NormalizeTo0_360(uint16_t par_deg);
 
 private:
+  void HandleRet(int8_t ret);
+  
   std::shared_ptr<I2cInterface> i2c_interface_;
   uint8_t device_id_;
+  uint8_t error_count_;
 
   SSD1306_t SSD1306;
   uint8_t buffer_[SSD1306_BUFFER_SIZE];
