@@ -19,5 +19,5 @@ jobs:
           package-name:
             turtlebot4_bringup
             turtlebot4_diagnostics
-            turtlebot4_node
+            turtlebot4_base
             turtlebot4_tests
