@@ -1,3 +1,62 @@
+# Teleop configuration for PS4 joystick using the x-pad configuration.
+# Left thumb-stick up/down for velocity, left/right for twist
+# Left shoulder button for enable
+# Right shoulder button for enable-turbo
+#
+#          L1                                       R1
+#          L2                                       R2
+#       _=====_                                  _=====_
+#      / _____ \                                / _____ \
+#    +.-'_____'-.------------------------------.-'_____'-.+
+#   /   |     |  '. (SHARE)        (OPTIONS) .'  |  _  |   \
+#  / ___| /|\ |___ \                        / ___| /_\ |___ \     (Y)   
+# / |      |      | ;                      ; | _         _ ||
+# | | <---   ---> | |                      | ||_|       (_)|| (X)     (B)  
+# | |___   |   ___| ;                      ; |___       ___||
+# |\    | \|/ |    /  _      ____      _   \    | (X) |    /|     (A)      
+# | \   |_____|  .','" "',  (HOME)  ,'" "', '.  |_____|  .' |
+# |  '-.______.-' /       \        /       \  '-._____.-'   |
+# |               |  LJ   |--------|  RJ   |                |
+# |              /\       /        \       /\               |
+# |             /  '.___.'          '.___.'  \              |
+# |            /                              \             |
+#  \          /                                \           /
+#   \________/                                  \_________/
+#
+#          ^ x
+#          |
+#          |
+#  y <-----+      Accelerometer axes
+#           \
+#            \
+#             > z (out)
+#
+# BUTTON         Value
+#   A              0
+#   B              1
+#   Y              2
+#   X              3
+#   L1             4
+#   L2             6
+#   R1             5
+#   R2             7
+#  Share           8
+#  Options         9
+#  Home            10
+#   L3             11
+#   R3             12
+#
+#    AXIS        Value
+# Left Horiz.      0
+# Left Vert.       1
+# Right Horiz.     3
+# Right Vert.      4
+#    L2            2
+#    R2            5
+# D-pad Horiz.     6
+# D-pad Vert.      7
+
+
 teleop_twist_joy_node:
   ros__parameters:
     axis_linear:
