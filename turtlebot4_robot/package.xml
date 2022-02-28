@@ -11,7 +11,7 @@
 
   <depend>turtlebot4_bringup</depend>
   <depend>turtlebot4_diagnostics</depend>
-  <depend>turtlebot4_node</depend>
+  <depend>turtlebot4_base</depend>
   <depend>turtlebot4_tests</depend>
 
   <export>
