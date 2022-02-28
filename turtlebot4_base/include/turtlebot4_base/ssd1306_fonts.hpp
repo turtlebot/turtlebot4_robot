@@ -26,12 +26,12 @@
  * @author Roni Kreinin (rkreinin@clearpathrobotics.com)
  */
 
-#ifndef TURTLEBOT4_NODE__SSD1306_FONTS_HPP_
-#define TURTLEBOT4_NODE__SSD1306_FONTS_HPP_
+#ifndef TURTLEBOT4_BASE__SSD1306_FONTS_HPP_
+#define TURTLEBOT4_BASE__SSD1306_FONTS_HPP_
 
 #include <stdint.h>
 
-namespace turtlebot4
+namespace turtlebot4_base
 {
 
 #define SSD1306_INCLUDE_FONT_6x8
@@ -60,6 +60,6 @@ extern FontDef Font_11x18;
 extern FontDef Font_16x26;
 #endif
 
-}  // namespace turtlebot4
+}  // namespace turtlebot4_base
 
-#endif  // TURTLEBOT4_NODE__SSD1306_FONTS_HPP_
+#endif  // TURTLEBOT4_BASE__SSD1306_FONTS_HPP_

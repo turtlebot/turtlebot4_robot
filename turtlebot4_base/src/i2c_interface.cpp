@@ -16,7 +16,7 @@
  * @author Roni Kreinin (rkreinin@clearpathrobotics.com)
  */
 
-#include "turtlebot4_node/i2c_interface.hpp"
+#include "turtlebot4_base/i2c_interface.hpp"
 
 #include <errno.h>
 #include <fcntl.h>
@@ -31,7 +31,7 @@
 #include <string>
 #include <iostream>
 
-using turtlebot4::I2cInterface;
+using turtlebot4_base::I2cInterface;
 
 I2cInterface::I2cInterface(const std::string & i2c_bus)
 : i2c_bus_(i2c_bus)
@@ -124,8 +124,6 @@ int8_t I2cInterface::write_to_bus(void * data, uint32_t count)
 
   int ret = write(i2c_fd_, data, count);
   if (ret < 0) {
-    std::cerr << __PRETTY_FUNCTION__ << ": Failed to write device: " << strerror(errno) <<
-      std::endl;
     return -1;
   } else if (static_cast<uint32_t>(ret) != count) {
     std::cerr << __PRETTY_FUNCTION__ << ": Short write to device, expected " << count << ", got " <<
@@ -140,8 +138,6 @@ int8_t I2cInterface::write_to_bus(const uint8_t address, void * data, uint32_t c
 {
   const std::lock_guard<std::mutex> lock(i2c_mutex_);
   if (write(i2c_fd_, &address, 1) < 0) {
-    std::cerr << __PRETTY_FUNCTION__ << ": Failed to write device: " << strerror(errno) <<
-      std::endl;
     return -1;
   }
 
@@ -151,8 +147,6 @@ int8_t I2cInterface::write_to_bus(const uint8_t address, void * data, uint32_t c
 
   int ret = write(i2c_fd_, data, count);
   if (ret < 0) {
-    std::cerr << __PRETTY_FUNCTION__ << ": Failed to write device: " << strerror(errno) <<
-      std::endl;
     return -1;
   } else if (static_cast<uint32_t>(ret) != count) {
     std::cerr << __PRETTY_FUNCTION__ << ": Short write to device, expected " << count << ", got " <<

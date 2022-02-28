@@ -27,7 +27,7 @@
  */
 
 
-#include "turtlebot4_node/ssd1306.hpp"
+#include "turtlebot4_base/ssd1306.hpp"
 
 #include <math.h>
 
@@ -36,7 +36,9 @@
 #include <memory>
 #include <iostream>
 
-using turtlebot4::Ssd1306;
+using turtlebot4_base::Ssd1306;
+using turtlebot4_base::SSD1306_t;
+using turtlebot4_base::SSD1306_Error_t;
 
 Ssd1306::Ssd1306(std::shared_ptr<I2cInterface> i2c_interface, uint8_t device_id)
 : i2c_interface_(i2c_interface),
@@ -57,10 +59,7 @@ void Ssd1306::WriteCommand(uint8_t byte)
   buf.command.control = 0x00;
   buf.command.byte = byte;
   auto ret = i2c_interface_->write_to_bus(buf.raw, sizeof(buf));
-  if (ret < 0) {
-    std::cerr << "Failed to write command" << std::endl;
-    Reset();
-  }
+  HandleRet(ret);
 }
 
 // Send data
@@ -70,10 +69,7 @@ void Ssd1306::WriteData(uint8_t * buffer, size_t buff_size)
   buf.page.control = 0x40;
   memcpy(buf.page.data, buffer, buff_size);
   auto ret = i2c_interface_->write_to_bus(buf.raw, sizeof(buf));
-  if (ret < 0) {
-    std::cerr << "Failed to write data" << std::endl;
-    Reset();
-  }
+  HandleRet(ret);
 }
 
 void Ssd1306::WritePage(uint8_t page)
@@ -84,8 +80,21 @@ void Ssd1306::WritePage(uint8_t page)
   WriteData(&buffer_[SSD1306_WIDTH * page], SSD1306_WIDTH);
 }
 
+void Ssd1306::HandleRet(int8_t ret)
+{
+  if (ret == 0) {
+    error_count_ = 0;
+  } else {
+    error_count_++;
+    if (error_count_ >= 3) {
+      std::cerr << "I2C Bus Error. Resetting." << std::endl;
+      Reset();
+    }
+  }
+}
+
 /* Fills the Screenbuffer with values from a given buffer of a fixed length */
-turtlebot4::SSD1306_Error_t Ssd1306::FillBuffer(uint8_t * buf, uint32_t len)
+SSD1306_Error_t Ssd1306::FillBuffer(uint8_t * buf, uint32_t len)
 {
   SSD1306_Error_t ret = SSD1306_ERR;
   if (len <= SSD1306_BUFFER_SIZE) {
@@ -224,7 +233,7 @@ void Ssd1306::SetCursor(uint8_t x, uint8_t y)
   SSD1306.CurrentY = y;
 }
 
-turtlebot4::SSD1306_t Ssd1306::GetCursor()
+SSD1306_t Ssd1306::GetCursor()
 {
   return SSD1306;
 }

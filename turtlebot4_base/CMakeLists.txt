@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(turtlebot4_node)
+project(turtlebot4_base)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
@@ -24,6 +24,7 @@ find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(irobot_create_msgs REQUIRED)
 find_package(turtlebot4_msgs REQUIRED)
+find_package(turtlebot4_node REQUIRED)
 
 find_library(GPIOD_LIBRARY NAMES libgpiod.so)
 
@@ -53,13 +54,14 @@ set(DEPENDENCIES
   "sensor_msgs"
   "irobot_create_msgs"
   "turtlebot4_msgs"
+  "turtlebot4_node"
 )
 
 target_link_libraries(${PROJECT_NAME}_lib ${GPIOD_LIBRARY})
 
 ament_target_dependencies(${PROJECT_NAME}_lib ${DEPENDENCIES})
 
-set(EXECUTABLE_NAME "turtlebot4_node")
+set(EXECUTABLE_NAME "turtlebot4_base_node")
 
 add_executable(${EXECUTABLE_NAME} src/main.cpp)
 target_link_libraries(${EXECUTABLE_NAME} ${PROJECT_NAME}_lib)

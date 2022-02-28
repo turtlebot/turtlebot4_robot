@@ -26,17 +26,17 @@
  * @author Roni Kreinin (rkreinin@clearpathrobotics.com)
  */
 
-#ifndef TURTLEBOT4_NODE__SSD1306_HPP_
-#define TURTLEBOT4_NODE__SSD1306_HPP_
+#ifndef TURTLEBOT4_BASE__SSD1306_HPP_
+#define TURTLEBOT4_BASE__SSD1306_HPP_
 
 #include <unistd.h>
 #include <memory>
 #include <string>
 
-#include "turtlebot4_node/i2c_interface.hpp"
-#include "turtlebot4_node/ssd1306_fonts.hpp"
+#include "turtlebot4_base/i2c_interface.hpp"
+#include "turtlebot4_base/ssd1306_fonts.hpp"
 
-namespace turtlebot4
+namespace turtlebot4_base
 {
 
 // SSD1306 OLED height in pixels
@@ -247,13 +247,16 @@ public:
   uint16_t NormalizeTo0_360(uint16_t par_deg);
 
 private:
+  void HandleRet(int8_t ret);
+  
   std::shared_ptr<I2cInterface> i2c_interface_;
   uint8_t device_id_;
+  uint8_t error_count_;
 
   SSD1306_t SSD1306;
   uint8_t buffer_[SSD1306_BUFFER_SIZE];
 };
 
-}  // namespace turtlebot4
+}  // namespace turtlebot4_base
 
-#endif  // TURTLEBOT4_NODE__SSD1306_HPP_
+#endif  // TURTLEBOT4_BASE__SSD1306_HPP_

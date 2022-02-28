@@ -16,8 +16,8 @@
  * @author Roni Kreinin (rkreinin@clearpathrobotics.com)
  */
 
-#ifndef TURTLEBOT4_NODE__GPIO_INTERFACE_HPP_
-#define TURTLEBOT4_NODE__GPIO_INTERFACE_HPP_
+#ifndef TURTLEBOT4_BASE__GPIO_INTERFACE_HPP_
+#define TURTLEBOT4_BASE__GPIO_INTERFACE_HPP_
 
 #include <linux/gpio.h>
 #include <gpiod.h>
@@ -28,7 +28,7 @@
 #include <map>
 
 
-namespace turtlebot4
+namespace turtlebot4_base
 {
 
 enum GpioInterfaceLineDirection
@@ -59,6 +59,6 @@ private:
   std::map<uint8_t, gpiod_line *> lines_;
 };
 
-}  // namespace turtlebot4
+}  // namespace turtlebot4_base
 
-#endif  // TURTLEBOT4_NODE__GPIO_INTERFACE_HPP_
+#endif  // TURTLEBOT4_BASE__GPIO_INTERFACE_HPP_
