@@ -6,7 +6,8 @@ turtlebot4_node:
       # Supported Functions:
       # Dock
       # Undock
-      # Follow
+      # Wall Follow Left
+      # Wall Follow Right
       # Power
       # EStop
 
@@ -34,17 +35,37 @@ turtlebot4_node:
       create3_power: ["EStop", "Power", "3000"]
       create3_2: ["Undock", "Wall Follow Right", "2000"]
 
-      hmi_1: ["Select", "", ""]
-      hmi_2: ["Back", "", ""]
-      hmi_3: ["Scroll Up", "", ""]
-      hmi_4: ["Scroll Down", "", ""]
+      hmi_1: ["Select"]
+      hmi_2: ["Back"]
+      hmi_3: ["Scroll Up"]
+      hmi_4: ["Scroll Down"]
 
       # Menu entry must match a function
     menu:
       entries: ["Dock", "Undock", "EStop", "Wall Follow Left", "Wall Follow Right", "Power", "Help"]
 
+      # Controller button functions
+
+      # Buttons:
+      # a b x y
+      # up down left right
+      # l1 l2 l3 r1 r2 r3
+      # share options home
+
+    controller:
+      b: ["EStop"]
+      a: ["Select"]
+      x: ["Back"]
+      up: ["Scroll Up"]
+      down: ["Scroll Down"]
+      l2: ["Wall Follow Left"]
+      r2: ["Wall Follow Right"]
+      home: ["Dock", "Undock", "3000"]
+
+
 turtlebot4_base_node:
   ros__parameters:
+    # Pin definition for HMI. Do NOT change if you are using the standard PCBA.
     pins:
       user_button_1: 13
       user_button_2: 19

@@ -18,7 +18,8 @@
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.substitutions import PathJoinSubstitution
+from launch.actions.declare_launch_argument import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
 from launch_ros.actions import Node
 
@@ -26,8 +27,14 @@ from launch_ros.actions import Node
 def generate_launch_description():
     pkg_turtlebot4_bringup = get_package_share_directory('turtlebot4_bringup')
 
-    ps4_config = PathJoinSubstitution(
-        [pkg_turtlebot4_bringup, 'config', 'ps4.config.yaml'])
+    param_file_cmd = DeclareLaunchArgument(
+        'param_file',
+        default_value=PathJoinSubstitution(
+            [pkg_turtlebot4_bringup, 'config', 'turtlebot4_controller.config.yaml']),
+        description='Turtlebot4 Joy teleop param file'
+    )
+
+    controller_config = LaunchConfiguration('param_file')
 
     joy_node = Node(
         package='joy_linux',
@@ -39,10 +46,11 @@ def generate_launch_description():
         package='teleop_twist_joy',
         executable='teleop_node',
         name='teleop_twist_joy_node',
-        parameters=[ps4_config]
+        parameters=[controller_config]
     )
 
     ld = LaunchDescription()
+    ld.add_action(param_file_cmd)
     ld.add_action(joy_node)
     ld.add_action(teleop_twist_joy_node)
 
