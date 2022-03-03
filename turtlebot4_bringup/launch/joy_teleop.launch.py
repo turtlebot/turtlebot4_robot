@@ -27,7 +27,7 @@ def generate_launch_description():
     pkg_turtlebot4_bringup = get_package_share_directory('turtlebot4_bringup')
 
     ps4_config = PathJoinSubstitution(
-        [pkg_turtlebot4_bringup, 'config', 'ps4.config.yaml'])
+        [pkg_turtlebot4_bringup, 'config', 'turtlebot4_controller.config.yaml'])
 
     joy_node = Node(
         package='joy_linux',

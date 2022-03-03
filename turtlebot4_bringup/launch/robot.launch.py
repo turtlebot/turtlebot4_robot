@@ -32,7 +32,7 @@ ARGUMENTS = [
                           description='use_sim'),
     DeclareLaunchArgument('model', default_value='standard',
                           choices=['standard', 'lite'],
-                          description='Turtlebot4 Model'),
+                          description='Turtlebot4 Model')
 ]
 
 
@@ -40,9 +40,14 @@ def generate_launch_description():
 
     pkg_turtlebot4_bringup = get_package_share_directory('turtlebot4_bringup')
 
-    turtlebot4_param_yaml_file = PathJoinSubstitution(
-        [pkg_turtlebot4_bringup, 'config', 'turtlebot4.yaml']
+    param_file_cmd = DeclareLaunchArgument(
+        'param_file',
+        default_value=PathJoinSubstitution(
+            [pkg_turtlebot4_bringup, 'config', 'turtlebot4.yaml']),
+        description='Turtlebot4 Robot param file'
     )
+
+    turtlebot4_param_yaml_file = LaunchConfiguration('param_file')
 
     turtlebot4_node = Node(
         package='turtlebot4_node',
@@ -60,6 +65,7 @@ def generate_launch_description():
     )
 
     ld = LaunchDescription(ARGUMENTS)
+    ld.add_action(param_file_cmd)
     ld.add_action(turtlebot4_node)
     ld.add_action(turtlebot4_base_node)
     return ld

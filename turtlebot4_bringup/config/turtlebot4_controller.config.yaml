@@ -1,4 +1,4 @@
-# Teleop configuration for PS4 joystick using the x-pad configuration.
+# Teleop configuration for Turtlebot4 Controller joystick using the x-pad configuration.
 # Left thumb-stick up/down for velocity, left/right for twist
 # Left shoulder button for enable
 # Right shoulder button for enable-turbo
