@@ -35,18 +35,18 @@ Buttons::Buttons(
     "hmi/buttons",
     rclcpp::SensorDataQoS());
 
-  nh_->declare_parameter("pins.user_button_1", 13);
-  nh_->declare_parameter("pins.user_button_2", 19);
-  nh_->declare_parameter("pins.user_button_3", 16);
-  nh_->declare_parameter("pins.user_button_4", 26);
+  nh_->declare_parameter("gpio.user_button_1", 13);
+  nh_->declare_parameter("gpio.user_button_2", 19);
+  nh_->declare_parameter("gpio.user_button_3", 16);
+  nh_->declare_parameter("gpio.user_button_4", 26);
 
-  user_button_pins_[0] = nh_->get_parameter("pins.user_button_1").as_int();
-  user_button_pins_[1] = nh_->get_parameter("pins.user_button_2").as_int();
-  user_button_pins_[2] = nh_->get_parameter("pins.user_button_3").as_int();
-  user_button_pins_[3] = nh_->get_parameter("pins.user_button_4").as_int();
+  user_button_gpio_[0] = nh_->get_parameter("gpio.user_button_1").as_int();
+  user_button_gpio_[1] = nh_->get_parameter("gpio.user_button_2").as_int();
+  user_button_gpio_[2] = nh_->get_parameter("gpio.user_button_3").as_int();
+  user_button_gpio_[3] = nh_->get_parameter("gpio.user_button_4").as_int();
 
   for (auto i = 0; i < HMI_BUTTON_COUNT; i++) {
-    gpio_interface->add_line(user_button_pins_[i], LINE_DIRECTION_INPUT);
+    gpio_interface->add_line(user_button_gpio_[i], LINE_DIRECTION_INPUT);
   }
 }
 
@@ -58,7 +58,7 @@ void Buttons::spin_once()
   auto button_msg = std::make_unique<turtlebot4_msgs::msg::UserButton>();
 
   for (auto i = 0; i < HMI_BUTTON_COUNT; i++) {
-    uint8_t read_val = gpio_interface_->read(user_button_pins_[i]);
+    uint8_t read_val = gpio_interface_->read(user_button_gpio_[i]);
     button_msg->button[i] = !read_val;
   }
 

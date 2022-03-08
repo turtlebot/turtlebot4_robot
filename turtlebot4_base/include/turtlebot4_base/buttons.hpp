@@ -45,7 +45,7 @@ public:
   void spin_once();
 
 private:
-  uint8_t user_button_pins_[HMI_BUTTON_COUNT];
+  uint8_t user_button_gpio_[HMI_BUTTON_COUNT];
 
   std::shared_ptr<GpioInterface> gpio_interface_;
 

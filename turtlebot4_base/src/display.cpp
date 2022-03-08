@@ -45,11 +45,11 @@ Display::Display(
     rclcpp::SensorDataQoS(),
     std::bind(&Display::display_callback, this, std::placeholders::_1));
 
-  nh_->declare_parameter("pins.display_reset", 2);
+  nh_->declare_parameter("gpio.display_reset", 2);
   // Initialize display reset pin and pull it low
-  gpio->add_line(nh_->get_parameter("pins.display_reset").as_int(), LINE_DIRECTION_OUTPUT);
+  gpio->add_line(nh_->get_parameter("gpio.display_reset").as_int(), LINE_DIRECTION_OUTPUT);
   // Set reset pin high to enter normal operation mode
-  gpio->write(nh_->get_parameter("pins.display_reset").as_int(), 1);
+  gpio->write(nh_->get_parameter("gpio.display_reset").as_int(), 1);
   // Initialize oled driver
   oled_.Init();
 }

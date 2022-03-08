@@ -31,41 +31,41 @@ Leds::Leds(
 {
   RCLCPP_INFO(nh_->get_logger(), "Leds Init");
 
-  nh_->declare_parameter("pins.led_green_power", 17);
-  nh_->declare_parameter("pins.led_green_motors", 18);
-  nh_->declare_parameter("pins.led_green_comms", 27);
-  nh_->declare_parameter("pins.led_green_wifi", 24);
-  nh_->declare_parameter("pins.led_green_battery", 22);
-  nh_->declare_parameter("pins.led_red_battery", 23);
-  nh_->declare_parameter("pins.led_green_user_1", 25);
-  nh_->declare_parameter("pins.led_green_user_2", 6);
-  nh_->declare_parameter("pins.led_red_user_2", 12);
+  nh_->declare_parameter("gpio.led_green_power", 17);
+  nh_->declare_parameter("gpio.led_green_motors", 18);
+  nh_->declare_parameter("gpio.led_green_comms", 27);
+  nh_->declare_parameter("gpio.led_green_wifi", 24);
+  nh_->declare_parameter("gpio.led_green_battery", 22);
+  nh_->declare_parameter("gpio.led_red_battery", 23);
+  nh_->declare_parameter("gpio.led_green_user_1", 25);
+  nh_->declare_parameter("gpio.led_green_user_2", 6);
+  nh_->declare_parameter("gpio.led_red_user_2", 12);
 
   // Power
   leds_ = {
     {Turtlebot4LedEnum::POWER, std::make_shared<Turtlebot4Led>(
         gpio_interface_,
-        nh_->get_parameter("pins.led_green_power").as_int())},
+        nh_->get_parameter("gpio.led_green_power").as_int())},
     {Turtlebot4LedEnum::MOTORS, std::make_shared<Turtlebot4Led>(
         gpio_interface_,
-        nh_->get_parameter("pins.led_green_motors").as_int())},
+        nh_->get_parameter("gpio.led_green_motors").as_int())},
     {Turtlebot4LedEnum::COMMS, std::make_shared<Turtlebot4Led>(
         gpio_interface_,
-        nh_->get_parameter("pins.led_green_comms").as_int())},
+        nh_->get_parameter("gpio.led_green_comms").as_int())},
     {Turtlebot4LedEnum::WIFI, std::make_shared<Turtlebot4Led>(
         gpio_interface_,
-        nh_->get_parameter("pins.led_green_wifi").as_int())},
+        nh_->get_parameter("gpio.led_green_wifi").as_int())},
     {Turtlebot4LedEnum::BATTERY, std::make_shared<Turtlebot4Led>(
         gpio_interface_,
-        nh_->get_parameter("pins.led_green_battery").as_int(),
-        nh_->get_parameter("pins.led_red_battery").as_int())},
+        nh_->get_parameter("gpio.led_green_battery").as_int(),
+        nh_->get_parameter("gpio.led_red_battery").as_int())},
     {Turtlebot4LedEnum::USER_1, std::make_shared<Turtlebot4Led>(
         gpio_interface_,
-        nh_->get_parameter("pins.led_green_user_1").as_int())},
+        nh_->get_parameter("gpio.led_green_user_1").as_int())},
     {Turtlebot4LedEnum::USER_2, std::make_shared<Turtlebot4Led>(
         gpio_interface_,
-        nh_->get_parameter("pins.led_green_user_2").as_int(),
-        nh_->get_parameter("pins.led_red_user_2").as_int())},
+        nh_->get_parameter("gpio.led_green_user_2").as_int(),
+        nh_->get_parameter("gpio.led_red_user_2").as_int())},
   };
 
   leds_[Turtlebot4LedEnum::POWER]->create_subscription(nh_, "/hmi/led/_power");

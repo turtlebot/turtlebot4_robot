@@ -63,8 +63,8 @@ turtlebot4_node:
 
 turtlebot4_base_node:
   ros__parameters:
-    # Pin definition for HMI. Do NOT change if you are using the standard PCBA.
-    pins:
+    # GPIO definition for HMI. Do NOT change if you are using the standard PCBA.
+    gpio:
       user_button_1: 13
       user_button_2: 19
       user_button_3: 16
