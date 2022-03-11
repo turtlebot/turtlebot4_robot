@@ -15,38 +15,11 @@
 # @author Roni Kreinin (rkreinin@clearpathrobotics.com)
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
-from launch.conditions import LaunchConfigurationEquals
 
 from launch_ros.actions import Node
 
-ARGUMENTS = [
-    DeclareLaunchArgument('model', default_value='standard',
-                          choices=['standard', 'lite'],
-                          description='Turtlebot4 Model'),
-]
-
 
 def generate_launch_description():
-
-    rplidar_standard_stf = Node(
-            name='rplidar_standard_stf',
-            package='tf2_ros',
-            executable='static_transform_publisher',
-            output='screen',
-            arguments=['-0.04816', '0', '0.14', '1.5707', '0.0', '0.0', 'base_link', 'laser'],
-            condition=LaunchConfigurationEquals('model', 'standard')
-        )
-
-    rplidar_lite_stf = Node(
-            name='rplidar_lite_stf',
-            package='tf2_ros',
-            executable='static_transform_publisher',
-            output='screen',
-            arguments=['0', '0', '0.07', '1.5707', '0.0', '0.0', 'base_link', 'laser'],
-            condition=LaunchConfigurationEquals('model', 'lite')
-        )
-
     rplidar_node = Node(
             name='rplidar_composition',
             package='rplidar_ros',
@@ -55,15 +28,13 @@ def generate_launch_description():
             parameters=[{
                 'serial_port': '/dev/RPLIDAR',
                 'serial_baudrate': 115200,
-                'frame_id': 'laser',
+                'frame_id': 'rplidar_link',
                 'inverted': False,
                 'angle_compensate': True,
             }],
         )
 
-    ld = LaunchDescription(ARGUMENTS)
-    ld.add_action(rplidar_lite_stf)
-    ld.add_action(rplidar_standard_stf)
+    ld = LaunchDescription()
     ld.add_action(rplidar_node)
 
     return ld

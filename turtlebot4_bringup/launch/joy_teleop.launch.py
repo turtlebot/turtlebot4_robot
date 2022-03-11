@@ -27,14 +27,14 @@ from launch_ros.actions import Node
 def generate_launch_description():
     pkg_turtlebot4_bringup = get_package_share_directory('turtlebot4_bringup')
 
-    param_file_cmd = DeclareLaunchArgument(
-        'param_file',
+    controller_config_cmd = DeclareLaunchArgument(
+        'controller_config',
         default_value=PathJoinSubstitution(
             [pkg_turtlebot4_bringup, 'config', 'turtlebot4_controller.config.yaml']),
         description='Turtlebot4 Joy teleop param file'
     )
 
-    controller_config = LaunchConfiguration('param_file')
+    controller_config = LaunchConfiguration('controller_config')
 
     joy_node = Node(
         package='joy_linux',
@@ -50,7 +50,7 @@ def generate_launch_description():
     )
 
     ld = LaunchDescription()
-    ld.add_action(param_file_cmd)
+    ld.add_action(controller_config_cmd)
     ld.add_action(joy_node)
     ld.add_action(teleop_twist_joy_node)
 
