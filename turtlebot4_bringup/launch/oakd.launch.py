@@ -91,7 +91,7 @@ def generate_launch_description():
             package='tf2_ros',
             executable='static_transform_publisher',
             output='screen',
-            arguments=['-0.0596', '0', '0.17933', '0', '0', '0', 'base_link', 'oak_left_camera_optical_frame'],
+            arguments=['0', '0', '0', '0', '0', '0', 'oakd_pro_link', 'oak_left_camera_optical_frame'],
             condition=LaunchConfigurationEquals('model', 'standard')
         )
 
@@ -100,7 +100,7 @@ def generate_launch_description():
             package='tf2_ros',
             executable='static_transform_publisher',
             output='screen',
-            arguments=['-0.0596', '0', '0.17933', '0', '0', '0', 'base_link', 'oak_right_camera_optical_frame'],
+            arguments=['0', '0', '0', '0', '0', '0', 'oakd_pro_link', 'oak_right_camera_optical_frame'],
             condition=LaunchConfigurationEquals('model', 'standard')
         )
 
@@ -109,7 +109,7 @@ def generate_launch_description():
             package='tf2_ros',
             executable='static_transform_publisher',
             output='screen',
-            arguments=['-0.0596', '0', '0.17933', '0', '0', '0', 'base_link', 'oak_rgb_camera_optical_frame'],
+            arguments=['0', '0', '0', '0', '0', '0', 'oakd_pro_link', 'oak_rgb_camera_optical_frame'],
             condition=LaunchConfigurationEquals('model', 'standard')
         )
 
