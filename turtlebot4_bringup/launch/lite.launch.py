@@ -48,7 +48,7 @@ def generate_launch_description():
     oakd_launch_file = PathJoinSubstitution(
         [pkg_turtlebot4_bringup, 'launch', 'oakd.launch.py'])
     description_launch_file = PathJoinSubstitution(
-        [pkg_turtlebot4_description, 'launch', 'description.launch.py']
+        [pkg_turtlebot4_description, 'launch', 'robot_description.launch.py']
     )
 
     lite_launch = IncludeLaunchDescription(
