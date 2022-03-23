@@ -76,51 +76,15 @@ def generate_launch_description():
         'LRchecktresh',
         default_value=LRchecktresh)
 
-    stereo_node = Node(
+    rgb_stereo_node = Node(
             package='depthai_examples',
-            executable='stereo_node',
+            executable='rgb_stereo_node',
             output='screen',
             parameters=[{'camera_name': camera_name},
                         {'mode': mode},
                         {'lrcheck': lrcheck},
                         {'extended': extended},
                         {'subpixel': subpixel}])
-
-    oakd_left_standard_stf = Node(
-            name='oakd_standard_stf',
-            package='tf2_ros',
-            executable='static_transform_publisher',
-            output='screen',
-            arguments=['0', '0', '0', '0', '0', '0', 'oakd_pro_link', 'oak_left_camera_optical_frame'],
-            condition=LaunchConfigurationEquals('model', 'standard')
-        )
-
-    oakd_right_standard_stf = Node(
-            name='oakd_standard_stf',
-            package='tf2_ros',
-            executable='static_transform_publisher',
-            output='screen',
-            arguments=['0', '0', '0', '0', '0', '0', 'oakd_pro_link', 'oak_right_camera_optical_frame'],
-            condition=LaunchConfigurationEquals('model', 'standard')
-        )
-
-    oakd_rgb_standard_stf = Node(
-            name='oakd_standard_stf',
-            package='tf2_ros',
-            executable='static_transform_publisher',
-            output='screen',
-            arguments=['0', '0', '0', '0', '0', '0', 'oakd_pro_link', 'oak_rgb_camera_optical_frame'],
-            condition=LaunchConfigurationEquals('model', 'standard')
-        )
-
-    oakd_lite_stf = Node(
-            name='oakd_lite_stf',
-            package='tf2_ros',
-            executable='static_transform_publisher',
-            output='screen',
-            arguments=['-0.09', '0', '0.18588622', '0', '0', '0', 'base_link', 'oak-d-base-frame'],
-            condition=LaunchConfigurationEquals('model', 'lite')
-        )
 
     ld = LaunchDescription()
     ld.add_action(robot_model)
@@ -133,10 +97,6 @@ def generate_launch_description():
     ld.add_action(declare_confidence_cmd)
     ld.add_action(declare_LRchecktresh_cmd)
 
-    ld.add_action(stereo_node)
-    ld.add_action(oakd_left_standard_stf)
-    ld.add_action(oakd_right_standard_stf)
-    ld.add_action(oakd_rgb_standard_stf)
-    ld.add_action(oakd_lite_stf)
+    ld.add_action(rgb_stereo_node)
 
     return ld

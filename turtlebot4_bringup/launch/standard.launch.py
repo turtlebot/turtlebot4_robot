@@ -28,6 +28,7 @@ def generate_launch_description():
 
     pkg_turtlebot4_bringup = get_package_share_directory('turtlebot4_bringup')
     pkg_turtlebot4_diagnostics = get_package_share_directory('turtlebot4_diagnostics')
+    pkg_turtlebot4_description = get_package_share_directory('turtlebot4_description')
 
     param_file_cmd = DeclareLaunchArgument(
         'param_file',
@@ -49,6 +50,9 @@ def generate_launch_description():
         [pkg_turtlebot4_bringup, 'launch', 'rplidar.launch.py'])
     oakd_launch_file = PathJoinSubstitution(
         [pkg_turtlebot4_bringup, 'launch', 'oakd.launch.py'])
+    description_launch_file = PathJoinSubstitution(
+        [pkg_turtlebot4_description, 'launch', 'description.launch.py']
+    )
 
     standard_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([turtlebot4_robot_launch_file]),
@@ -62,6 +66,10 @@ def generate_launch_description():
         PythonLaunchDescriptionSource([rplidar_launch_file]))
     oakd_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([oakd_launch_file]))
+    description_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([description_launch_file]),
+        launch_arguments=[('model', 'standard')]
+    )
 
     ld = LaunchDescription()
     ld.add_action(param_file_cmd)
@@ -70,4 +78,5 @@ def generate_launch_description():
     ld.add_action(diagnostics_launch)
     ld.add_action(rplidar_launch)
     ld.add_action(oakd_launch)
+    ld.add_action(description_launch)
     return ld
