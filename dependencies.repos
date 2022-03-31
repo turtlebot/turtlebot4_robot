@@ -2,7 +2,7 @@ repositories:
   irobot_create_msgs:
     type: git
     url: https://github.com/iRobotEducation/irobot_create_msgs.git
-    version: galactic
+    version: main
   luxonis/depthai-ros:
     type: git
     url: https://github.com/luxonis/depthai-ros.git
@@ -10,7 +10,7 @@ repositories:
   luxonis/depthai-ros-examples:
     type: git
     url: https://github.com/luxonis/depthai-ros-examples.git
-    version: main
+    version: devel
   turtlebot4:
     type: git
     url: https://github.com/turtlebot/turtlebot4.git
