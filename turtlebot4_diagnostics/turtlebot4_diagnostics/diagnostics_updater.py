@@ -77,20 +77,6 @@ class Turtlebot4DiagnosticUpdater(Node):
             qos_profile_sensor_data
         )
 
-        self.left_image_sub = self.create_subscription(
-            Image,
-            '/left/image',
-            self.left_image_callback,
-            qos_profile_sensor_data
-        )
-
-        self.right_image_sub = self.create_subscription(
-            Image,
-            '/right/image',
-            self.right_image_callback,
-            qos_profile_sensor_data
-        )
-
         self.stereo_depth_sub = self.create_subscription(
             Image,
             '/stereo/depth',
@@ -100,7 +86,7 @@ class Turtlebot4DiagnosticUpdater(Node):
 
         self.color_image_sub = self.create_subscription(
             Image,
-            '/color/image',
+            '/color/preview/image',
             self.color_image_callback,
             qos_profile_sensor_data
         )
@@ -127,11 +113,11 @@ class Turtlebot4DiagnosticUpdater(Node):
         )
 
         # Initial values
-        self.battery_percentage = 1.0
-        self.battery_voltage = 16.0
-        self.wheels_enabled = True
-        self.is_docked = True
-        self.dock_visible = True
+        self.battery_percentage = 0.0
+        self.battery_voltage = 0.0
+        self.wheels_enabled = False
+        self.is_docked = False
+        self.dock_visible = False
         self.lidar_freq_bounds = {'min': 5, 'max': 10}
         self.camera_freq_bounds = {'min': 5, 'max': 60}
         self.imu_freq_bounds = {'min': 61, 'max': 63}
@@ -151,22 +137,12 @@ class Turtlebot4DiagnosticUpdater(Node):
                                                     FrequencyStatusParam(
                                                         self.lidar_freq_bounds, 0.1, 10))
 
-        self.left_image_freq = HeaderlessTopicDiagnostic('/left/image',
-                                                         self.updater,
-                                                         FrequencyStatusParam(
-                                                            self.camera_freq_bounds, 0.1, 10))
-
-        self.right_image_freq = HeaderlessTopicDiagnostic('/right/image',
-                                                          self.updater,
-                                                          FrequencyStatusParam(
-                                                              self.camera_freq_bounds, 0.1, 10))
-
         self.stereo_depth_freq = HeaderlessTopicDiagnostic('/stereo/depth',
                                                            self.updater,
                                                            FrequencyStatusParam(
                                                                self.camera_freq_bounds, 0.1, 10))
 
-        self.color_image_freq = HeaderlessTopicDiagnostic('/color/image',
+        self.color_image_freq = HeaderlessTopicDiagnostic('/color/preview/image',
                                                           self.updater,
                                                           FrequencyStatusParam(
                                                               self.camera_freq_bounds, 0.1, 10))
@@ -258,12 +234,6 @@ class Turtlebot4DiagnosticUpdater(Node):
 
     def lidar_callback(self, msg):
         self.lidar_freq.tick()
-
-    def left_image_callback(self, msg):
-        self.left_image_freq.tick()
-
-    def right_image_callback(self, msg):
-        self.right_image_freq.tick()
 
     def stereo_depth_callback(self, msg):
         self.stereo_depth_freq.tick()

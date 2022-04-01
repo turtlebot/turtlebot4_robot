@@ -65,11 +65,11 @@ def generate_launch_description():
     rplidar_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([rplidar_launch_file]))
     oakd_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([oakd_launch_file]))
+        PythonLaunchDescriptionSource([oakd_launch_file]),
+        launch_arguments=[('tf_prefix', 'oakd_pro')])
     description_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([description_launch_file]),
-        launch_arguments=[('model', 'standard')]
-    )
+        launch_arguments=[('model', 'standard')])
 
     ld = LaunchDescription()
     ld.add_action(param_file_cmd)

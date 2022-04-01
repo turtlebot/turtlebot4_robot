@@ -61,7 +61,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource([rplidar_launch_file]))
     oakd_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([oakd_launch_file]),
-        launch_arguments=[('camera_model', 'OAK-D-LITE')])
+        launch_arguments=[('tf_prefix', 'oakd_lite')])
     description_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([description_launch_file]),
         launch_arguments=[('model', 'lite')]

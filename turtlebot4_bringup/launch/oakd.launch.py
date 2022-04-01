@@ -16,87 +16,70 @@
 # @author Roni Kreinin (rkreinin@clearpathrobotics.com)
 
 
-import os
-
 from ament_index_python.packages import get_package_share_directory
 
-from launch import launch_description_sources, LaunchDescription
+from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
-from launch.conditions import LaunchConfigurationEquals
-from launch.substitutions import LaunchConfiguration
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
-from launch_ros.actions import Node
-import launch_ros.descriptions
 
+ARGUMENTS = [
+    DeclareLaunchArgument(
+        'tf_prefix',
+        default_value='oakd_pro',
+        description='The name of the camera. \
+                     It can be different from the camera model \
+                     and it will be used in naming TF.'),
+    DeclareLaunchArgument(
+        'publish_urdf',
+        default_value='False',
+        description='Whether to publish the urdf'),
+    DeclareLaunchArgument(
+        'colorResolution',
+        choices=['1080p', '4K'],
+        default_value='1080p',
+        description='The resolution of the color camera'),
+    DeclareLaunchArgument(
+        'useVideo',
+        default_value='False',
+        description='Whether to publish a video of color image'),
+    DeclareLaunchArgument(
+        'usePreview',
+        default_value='True',
+        description='Whether to publish a preview of color image'),
+    DeclareLaunchArgument(
+        'useDepth',
+        default_value='True',
+        description='Whether to publish the depth image'),
+    DeclareLaunchArgument(
+        'previewWidth',
+        default_value='250',
+        description='Width of preview image'),
+    DeclareLaunchArgument(
+        'previewHeight',
+        default_value='250',
+        description='Height of preview image')
+]
 
 def generate_launch_description():
-    camera_name = LaunchConfiguration('camera_name',   default='oak')
 
-    mode = LaunchConfiguration('mode', default='depth')
-    lrcheck = LaunchConfiguration('lrcheck', default=True)
-    extended = LaunchConfiguration('extended', default=False)
-    subpixel = LaunchConfiguration('subpixel', default=True)
-    confidence = LaunchConfiguration('confidence', default=200)
-    LRchecktresh = LaunchConfiguration('LRchecktresh', default=5)
+    pkg_depthai_examples = get_package_share_directory('depthai_examples')
 
-    robot_model = DeclareLaunchArgument('model',
-                                        default_value='standard',
-                                        choices=['standard', 'lite'],
-                                        description='Turtlebot4 Model')
+    rgb_stereo_launch_file = PathJoinSubstitution(
+        [pkg_depthai_examples, 'launch', 'rgb_stereo_node.launch.py'])
 
-    declare_camera_name_cmd = DeclareLaunchArgument(
-        'camera_name',
-        default_value=camera_name,
-        description='The name of the camera. It can be different from the camera model \
-                     and it will be used in naming TF.')
+    oakd_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([rgb_stereo_launch_file]),
+        launch_arguments={'colorResolution': LaunchConfiguration('colorResolution'),
+                          'useVideo': LaunchConfiguration('useVideo'),
+                          'usePreview': LaunchConfiguration('usePreview'),
+                          'useDepth': LaunchConfiguration('useDepth'),
+                          'previewWidth': LaunchConfiguration('previewWidth'),
+                          'previewHeight': LaunchConfiguration('previewHeight'),
+                          'publish_urdf': LaunchConfiguration('publish_urdf'),
+                          'tf_prefix': LaunchConfiguration('tf_prefix')}.items())
 
-    declare_mode_cmd = DeclareLaunchArgument(
-        'mode',
-        default_value=mode,
-        description='set to depth or disparity. \
-                     Setting to depth will publish depth or else will publish disparity.')
-
-    declare_lrcheck_cmd = DeclareLaunchArgument(
-        'lrcheck',
-        default_value=lrcheck)
-
-    declare_extended_cmd = DeclareLaunchArgument(
-        'extended',
-        default_value=extended)
-
-    declare_subpixel_cmd = DeclareLaunchArgument(
-        'subpixel',
-        default_value=subpixel)
-
-    declare_confidence_cmd = DeclareLaunchArgument(
-        'confidence',
-        default_value=confidence)
-
-    declare_LRchecktresh_cmd = DeclareLaunchArgument(
-        'LRchecktresh',
-        default_value=LRchecktresh)
-
-    rgb_stereo_node = Node(
-            package='depthai_examples',
-            executable='rgb_stereo_node',
-            output='screen',
-            parameters=[{'camera_name': camera_name},
-                        {'mode': mode},
-                        {'lrcheck': lrcheck},
-                        {'extended': extended},
-                        {'subpixel': subpixel}])
-
-    ld = LaunchDescription()
-    ld.add_action(robot_model)
-    ld.add_action(declare_camera_name_cmd)
-
-    ld.add_action(declare_mode_cmd)
-    ld.add_action(declare_lrcheck_cmd)
-    ld.add_action(declare_extended_cmd)
-    ld.add_action(declare_subpixel_cmd)
-    ld.add_action(declare_confidence_cmd)
-    ld.add_action(declare_LRchecktresh_cmd)
-
-    ld.add_action(rgb_stereo_node)
-
+    ld = LaunchDescription(ARGUMENTS)
+    ld.add_action(oakd_launch)
     return ld
