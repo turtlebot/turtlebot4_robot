@@ -19,12 +19,16 @@
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
 
 def generate_launch_description():
+
+    cyclonedds_uri = SetEnvironmentVariable(
+        name='CYCLONEDDS_URI',
+        value=['<CycloneDDS><Domain><General><NetworkInterfaceAddress>wlan0,usb0</></></></>'])
 
     pkg_turtlebot4_bringup = get_package_share_directory('turtlebot4_bringup')
     pkg_turtlebot4_diagnostics = get_package_share_directory('turtlebot4_diagnostics')
@@ -68,6 +72,7 @@ def generate_launch_description():
     )
 
     ld = LaunchDescription()
+    ld.add_action(cyclonedds_uri)
     ld.add_action(param_file_cmd)
     ld.add_action(lite_launch)
     ld.add_action(diagnostics_launch)
