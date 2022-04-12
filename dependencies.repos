@@ -10,7 +10,7 @@ repositories:
   luxonis/depthai-ros-examples:
     type: git
     url: https://github.com/luxonis/depthai-ros-examples.git
-    version: devel
+    version: main
   turtlebot4:
     type: git
     url: https://github.com/turtlebot/turtlebot4.git
