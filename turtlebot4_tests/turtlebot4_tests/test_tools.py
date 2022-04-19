@@ -16,9 +16,12 @@
 #
 # @author Roni Kreinin (rkreinin@clearpathrobotics.com)
 
+import math
 import os
 import sys
 import time
+import subprocess
+import psutil
 
 
 class TestResult:
@@ -29,6 +32,7 @@ class TestResult:
 
 
 class Test:
+    count = 0
 
     def __init__(self, name, func):
         self.name = name
@@ -37,12 +41,18 @@ class Test:
 
 class Tester():
     tests = []
+    processes = []
+    rosbag_count = 0
+
+    def __init__(self, results_dir):
+        self.results_dir = results_dir
 
     def addTest(self, name, func):
         self.tests.append(Test(name, func))
 
     def runTest(self, index):
         test = self.tests[index]
+        self.tests[index].count += 1
 
         # Format
         dash = '-' * 30
@@ -52,6 +62,7 @@ class Tester():
 
         status = False
 
+        self.rosbag_record(index)
         # Enables automatic rerunning of test if test execution failed
         try:
             while not status:
@@ -59,6 +70,8 @@ class Tester():
         # ctrl+c to exit test
         except KeyboardInterrupt:
             pass
+
+        self.rosbag_stop()
 
     def showTestOptions(self):
         # Format
@@ -69,8 +82,7 @@ class Tester():
 
         for i, test in enumerate(self.tests):
             print('{:d}. {}'.format(i + 1, test.name))
-        print('{:d}. All Tests'.format(len(self.tests) + 1))
-        print('{:d}. Exit'.format(len(self.tests) + 2))
+        print('{:d}. Exit'.format(len(self.tests) + 1))
         try:
             option = int(input('Select an option: '))
         except ValueError:
@@ -78,12 +90,8 @@ class Tester():
             self.showTestOptions()
 
         # Exit option
-        if option == len(self.tests) + 2:
-            sys.exit()
-        # All tests option
-        elif option == len(self.tests) + 1:
-            for index in range(len(self.tests)):
-                self.runTest(index)
+        if option == len(self.tests) + 1:
+            return
         elif option > 0 and option <= len(self.tests):
             self.runTest(option - 1)
         else:
@@ -94,6 +102,19 @@ class Tester():
 
     def run(self):
         self.showTestOptions()
+
+    def rosbag_record(self, index):
+        self.rosbag_process = subprocess.Popen(
+            'exec ' + 'ros2 bag record -o {0}/rosbag2/{1}-{2} -a'.format(
+                self.results_dir, self.tests[index].name.replace(" ", "_"),
+                self.tests[index].count),
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True)
+
+    def rosbag_stop(self):
+        parent = psutil.Process(self.rosbag_process.pid)
+        for child in parent.children(recursive=True):
+            child.kill()
+        parent.kill()
 
 
 # Displays user prompt message, then requests user input of (y/n).
@@ -167,3 +188,27 @@ def logTestResults(file, name, results):
         f.write(output_result)
 
     f.close()
+
+
+def euler_from_quaternion(quaternion):
+    """
+    Converts quaternion (w in last place) to euler roll, pitch, yaw
+    quaternion = [x, y, z, w]
+    """
+    x = quaternion.x
+    y = quaternion.y
+    z = quaternion.z
+    w = quaternion.w
+
+    sinr_cosp = 2 * (w * x + y * z)
+    cosr_cosp = 1 - 2 * (x * x + y * y)
+    roll = math.atan2(sinr_cosp, cosr_cosp)
+
+    sinp = 2 * (w * y - z * x)
+    pitch = math.asin(sinp)
+
+    siny_cosp = 2 * (w * z + x * y)
+    cosy_cosp = 1 - 2 * (y * y + z * z)
+    yaw = math.atan2(siny_cosp, cosy_cosp)
+
+    return roll, pitch, yaw

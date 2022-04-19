@@ -28,13 +28,18 @@
 
 import os
 from os.path import expanduser
+from re import L
 
-import subprocess
+
 import threading
 import time
+import math
+import psutil
 
-from irobot_create_msgs.action import DockServo, Undock
+from irobot_create_msgs.action import DockServo, Undock, DriveDistance, RotateAngle
 from irobot_create_msgs.msg import Dock, InterfaceButtons, LightringLeds
+
+from nav_msgs.msg import Odometry
 
 import rclpy
 from rclpy.action import ActionClient
@@ -47,6 +52,7 @@ from turtlebot4_msgs.msg import UserButton, UserLed
 
 from turtlebot4_tests.test_tools import boolTestResults, logTestResults, notApplicableTestResult
 from turtlebot4_tests.test_tools import printTestResults, Tester, userInputTestResults
+from turtlebot4_tests.test_tools import euler_from_quaternion
 
 
 class Turtlebot4RosTests(Node):
@@ -63,21 +69,21 @@ class Turtlebot4RosTests(Node):
         os.makedirs(os.path.dirname(self.log_file_name), exist_ok=True)
 
         print('Saving results to ' + self.results_dir)
-        # Record rosbag
-        self.rosbag_thread = threading.Thread(
-            target=subprocess.run,
-            args=(['ros2', 'bag', 'record', '-o', self.results_dir + '/rosbag2', '-a'],),
-            kwargs={'stdout': subprocess.DEVNULL, 'stderr': subprocess.DEVNULL}, daemon=True,)
-        self.rosbag_thread.start()
 
-        self.tester = Tester()
+        self.tester = Tester(self.results_dir)
 
+        # Add tests
         self.tester.addTest('Light Ring Test', self.lightRingTest)
         self.tester.addTest('Create3 Button Test', self.createButtonTest)
+        self.tester.addTest('Drive Test', self.driveTest)
+        self.tester.addTest('Dock Test', self.dockTest)
         self.tester.addTest('User LED Test', self.userLedTest)
         self.tester.addTest('Display Test', self.displayTest)
         self.tester.addTest('User Button Test', self.userButtonTest)
-        self.tester.addTest('Dock Test', self.dockTest)
+        self.tester.addTest('TurtleBot 4 Lite Tests', self.liteTests)
+        self.tester.addTest('TurtleBot 4 Tests', self.standardTests)
+
+    
 
     def lightRingTest(self):
         results = []
@@ -376,6 +382,98 @@ class Turtlebot4RosTests(Node):
         self.destroy_subscription(dock_sub)
         return True
 
+    def odomCallback(self, msg):
+        self.odom = msg
+        self.odom_received = True
+
+    def driveTest(self):
+        results = []
+        poses = []
+        self.odom_received = False
+        self.odom = Odometry()
+
+        drive_distance = 0.25
+        rotate_angle = math.pi/2
+
+        drive_action_client = ActionClient(self, DriveDistance, '/drive_distance')
+        rotate_action_client = ActionClient(self, RotateAngle, '/rotate_angle')
+        drive_goal_msg = DriveDistance.Goal()
+        drive_goal_msg.distance = drive_distance
+        rotate_goal_msg = RotateAngle.Goal()
+        rotate_goal_msg.angle = rotate_angle
+
+
+        dock_sub = self.create_subscription(Odometry,
+                                            '/odom',
+                                            self.odomCallback,
+                                            qos_profile_sensor_data)
+
+        print('The robot will drive forwards 0.25m then turn 90 degrees 4 times.')
+        input('Press enter to start.')
+
+        if not self.odom_received:
+            print('Waiting for odometry...')
+
+            while(not self.odom_received):
+                time.sleep(0.1)
+
+            print('Odometry received')
+
+        poses.append(self.odom.pose.pose)
+
+        for i in range(0, 4):
+            drive_action_client.wait_for_server()
+            drive_goal_result = drive_action_client.send_goal(drive_goal_msg)
+            poses.append(drive_goal_result.result.pose.pose)
+
+            time.sleep(1)
+
+            rotate_action_client.wait_for_server()
+            rotate_goal_result = rotate_action_client.send_goal(rotate_goal_msg)
+            poses.append(rotate_goal_result.result.pose.pose)
+
+            time.sleep(1)
+
+        delta_positions = []
+        delta_yaw = []
+        for i in range(0, len(poses) - 1):
+            delta_positions.append(math.dist([poses[i].position.x, poses[i].position.y],
+                                             [poses[i+1].position.x, poses[i+1].position.y]))
+            r1, p1, y1 = euler_from_quaternion(poses[i].orientation)
+            r2, p2, y2 = euler_from_quaternion(poses[i+1].orientation)
+            delta_yaw.append(abs((math.degrees(y1) - math.degrees(y2) + 180) % 360 - 180))
+
+        print('{:<8} | {:<20} | {:<20}'.format('Action', 'Δ Position (m)', 'Δ Yaw (deg)'))
+
+        for i in range(0, len(delta_positions)):
+            print('{:<8} | {:<20} | {:<20}'.format(i + 1, delta_positions[i], delta_yaw[i]))
+            if i % 2 == 0:
+                results.append(boolTestResults(
+                    math.isclose(delta_positions[i], drive_distance, rel_tol=0.1),
+                    'Action {0} Drive'.format(i+1)))
+            else:
+                results.append(boolTestResults(
+                    math.isclose(delta_yaw[i], rotate_angle, rel_tol=1),
+                    'Action {0} Rotate'.format(i+1)))
+
+        printTestResults('Drive Test', results)
+        logTestResults(self.log_file_name, 'Drive Test', results)
+
+        self.destroy_client(drive_action_client)
+        self.destroy_client(rotate_action_client)
+        self.destroy_subscription(dock_sub)
+        return True
+
+    def liteTests(self):
+        for i in range(0, 4):
+            self.tester.runTest(i)
+        return True
+
+    def standardTests(self):
+        for i in range(0, 7):
+            self.tester.runTest(i)
+        return True
+
 
 def main(args=None):
     rclpy.init(args=args)
@@ -387,12 +485,14 @@ def main(args=None):
 
     print('Running Turtlebot4 ROS tests...\n')
 
-    tests.tester.run()
+    try:
+        tests.tester.run()
+    except KeyboardInterrupt:
+        pass
 
     tests.destroy_node()
     rclpy.shutdown()
 
-    tests.rosbag_thread.join()
     thread.join()
 
 
