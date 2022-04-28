@@ -78,7 +78,7 @@ class Turtlebot4RosTests(Node):
         self.tester.addTest('Drive Test', self.driveTest)
         self.tester.addTest('Dock Test', self.dockTest)
         self.tester.addTest('User LED Test', self.userLedTest)
-        self.tester.addTest('Display Test', self.displayTest)
+        self.tester.addTest('User Display Test', self.displayTest)
         self.tester.addTest('User Button Test', self.userButtonTest)
         self.tester.addTest('TurtleBot 4 Lite Tests', self.liteTests)
         self.tester.addTest('TurtleBot 4 Tests', self.standardTests)
@@ -213,7 +213,7 @@ class Turtlebot4RosTests(Node):
         response_delay = 1
         print('Testing User LEDs... \n')
 
-        user_led_pub = self.create_publisher(UserLed, '/hmi/led/set', qos_profile_sensor_data)
+        user_led_pub = self.create_publisher(UserLed, '/hmi/led', qos_profile_sensor_data)
         time.sleep(response_delay)
 
         msg = UserLed()
@@ -233,6 +233,7 @@ class Turtlebot4RosTests(Node):
         user_led_pub.publish(msg)
         time.sleep(response_delay)
         results.append(userInputTestResults('Is User LED 1 Green?', 'User LED 1 Green'))
+        time.sleep(response_delay)
 
         msg.led = 1
         msg.color = 1
@@ -240,18 +241,21 @@ class Turtlebot4RosTests(Node):
         user_led_pub.publish(msg)
         time.sleep(response_delay)
         results.append(userInputTestResults('Is User LED 2 Green?', 'User LED 2 Green'))
+        time.sleep(response_delay)
 
         msg.color = 2
 
         user_led_pub.publish(msg)
         time.sleep(response_delay)
         results.append(userInputTestResults('Is User LED 2 Red?', 'User LED 2 Red'))
+        time.sleep(response_delay)
 
         msg.color = 3
 
         user_led_pub.publish(msg)
         time.sleep(response_delay)
         results.append(userInputTestResults('Is User LED 2 Yellow?', 'User LED 2 Yellow'))
+        time.sleep(response_delay)
 
         msg.led = 0
         msg.color = 1
@@ -281,7 +285,7 @@ class Turtlebot4RosTests(Node):
         response_delay = 1
         print('Testing the display... \n')
 
-        display_pub = self.create_publisher(String, '/hmi/display/set', qos_profile_sensor_data)
+        display_pub = self.create_publisher(String, '/hmi/display/message', qos_profile_sensor_data)
         time.sleep(response_delay)
 
         msg = String()
@@ -296,8 +300,8 @@ class Turtlebot4RosTests(Node):
 
         self.destroy_publisher(display_pub)
 
-        printTestResults('Display Test', results)
-        logTestResults(self.log_file_name, 'Display Test', results)
+        printTestResults('User Display Test', results)
+        logTestResults(self.log_file_name, 'User Display Test', results)
         return True
 
     def userButtonCallback(self, msg):
@@ -314,7 +318,7 @@ class Turtlebot4RosTests(Node):
         user_button_sub = self.create_subscription(UserButton,
                                                    '/hmi/buttons',
                                                    self.userButtonCallback,
-                                                   qos_profile_system_default)
+                                                   qos_profile_sensor_data)
         time.sleep(response_delay)
 
         for i in range(0, 4):
