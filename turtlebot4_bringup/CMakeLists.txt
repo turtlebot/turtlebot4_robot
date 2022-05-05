@@ -18,6 +18,8 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(turtlebot4_node REQUIRED)
+find_package(turtlebot4_description REQUIRED)
+find_package(turtlebot4_diagnostics REQUIRED)
 find_package(depthai_ros_msgs REQUIRED)
 find_package(depthai_bridge REQUIRED)
 find_package(depthai_examples REQUIRED)
@@ -25,9 +27,6 @@ find_package(rplidar_ros REQUIRED)
 find_package(joy_linux REQUIRED)
 find_package(teleop_twist_joy REQUIRED)
 find_package(tf2_ros REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
 
 install(
   DIRECTORY launch config

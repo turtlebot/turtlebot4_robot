@@ -10,6 +10,8 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <depend>turtlebot4_node</depend>
+  <depend>turtlebot4_description</depend>
+  <depend>turtlebot4_diagnostics</depend>
   <depend>rplidar_ros</depend>
   <depend>depthai_ros_msgs</depend>
   <depend>depthai_bridge</depend>
