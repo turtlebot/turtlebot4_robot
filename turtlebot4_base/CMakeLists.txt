@@ -17,12 +17,13 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(irobot_create_msgs REQUIRED)
+find_package(libgpiod-dev REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(rcutils REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
-find_package(irobot_create_msgs REQUIRED)
 find_package(turtlebot4_msgs REQUIRED)
 find_package(turtlebot4_node REQUIRED)
 
