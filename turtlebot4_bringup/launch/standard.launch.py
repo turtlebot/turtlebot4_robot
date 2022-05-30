@@ -26,10 +26,6 @@ from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
 def generate_launch_description():
 
-    cyclonedds_uri = SetEnvironmentVariable(
-        name='CYCLONEDDS_URI',
-        value=['<CycloneDDS><Domain><General><NetworkInterfaceAddress>wlan0,usb0</></></></>'])
-
     pkg_turtlebot4_bringup = get_package_share_directory('turtlebot4_bringup')
     pkg_turtlebot4_diagnostics = get_package_share_directory('turtlebot4_diagnostics')
     pkg_turtlebot4_description = get_package_share_directory('turtlebot4_description')
@@ -76,7 +72,6 @@ def generate_launch_description():
         launch_arguments=[('model', 'standard')])
 
     ld = LaunchDescription()
-    ld.add_action(cyclonedds_uri)
     ld.add_action(param_file_cmd)
     ld.add_action(standard_launch)
     ld.add_action(teleop_launch)
