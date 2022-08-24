@@ -10,6 +10,7 @@ turtlebot4_node:
       # Wall Follow Right
       # Power
       # EStop
+      # RPLIDAR Motor
 
       # Menu Functions:
       # Scroll Up
@@ -42,7 +43,7 @@ turtlebot4_node:
 
       # Menu entry must match a function
     menu:
-      entries: ["Dock", "Undock", "EStop", "Wall Follow Left", "Wall Follow Right", "Power", "Help"]
+      entries: ["Dock", "Undock", "EStop", "Wall Follow Left", "Wall Follow Right", "RPLIDAR Motor", "Power", "Help"]
 
     # Controller button functions
     # Buttons:
@@ -52,9 +53,10 @@ turtlebot4_node:
     # share options home
 
     controller:
-      b: ["EStop"]
       a: ["Select"]
+      b: ["EStop"]
       x: ["Back"]
+      y: ["RPLIDAR Motor"]
       up: ["Scroll Up"]
       down: ["Scroll Down"]
       l2: ["Wall Follow Left"]
