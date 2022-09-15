@@ -2,8 +2,8 @@
 Changelog for package turtlebot4_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.3 (2022-09-15)
+------------------
 * Added RPLIDAR Motor function to config
 * Contributors: Roni Kreinin
 
