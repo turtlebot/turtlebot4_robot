@@ -2,6 +2,11 @@
 Changelog for package turtlebot4_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Added RPLIDAR Motor function to config
+* Contributors: Roni Kreinin
+
 0.1.2 (2022-05-30)
 ------------------
 * Removed cyclonedds uri from launch files
