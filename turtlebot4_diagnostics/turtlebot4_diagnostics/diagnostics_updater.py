@@ -22,7 +22,7 @@ from diagnostic_msgs.msg import DiagnosticStatus
 
 from diagnostic_updater import FrequencyStatusParam, HeaderlessTopicDiagnostic, Updater
 
-from irobot_create_msgs.msg import Dock, HazardDetectionVector, Mouse, WheelStatus
+from irobot_create_msgs.msg import DockStatus, HazardDetectionVector, Mouse, WheelStatus
 
 import rclpy
 from rclpy.node import Node
@@ -64,8 +64,8 @@ class Turtlebot4DiagnosticUpdater(Node):
         )
 
         self.dock_sub = self.create_subscription(
-            Dock,
-            '/dock',
+            DockStatus,
+            '/dock_status',
             self.dock_callback,
             qos_profile_sensor_data
         )

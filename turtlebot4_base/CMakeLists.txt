@@ -26,7 +26,7 @@ find_package(sensor_msgs REQUIRED)
 find_package(turtlebot4_msgs REQUIRED)
 find_package(turtlebot4_node REQUIRED)
 
-find_library(GPIOD_LIBRARY NAMES libgpiod.so)
+find_library(gpiod_library NAMES libgpiod.so)
 
 #Build
 
@@ -57,7 +57,7 @@ set(DEPENDENCIES
   "turtlebot4_node"
 )
 
-target_link_libraries(${PROJECT_NAME}_lib ${GPIOD_LIBRARY})
+target_link_libraries(${PROJECT_NAME}_lib ${gpiod_library})
 
 ament_target_dependencies(${PROJECT_NAME}_lib ${DEPENDENCIES})
 
