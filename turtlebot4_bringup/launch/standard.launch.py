@@ -18,13 +18,17 @@
 
 from ament_index_python.packages import get_package_share_directory
 
-from launch import LaunchDescription
+from launch import LaunchContext, LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import EnvironmentVariable, LaunchConfiguration, PathJoinSubstitution
 
 
 def generate_launch_description():
+    lc = LaunchContext()
+    ld = LaunchDescription()
+
+    diagnostics_enable = EnvironmentVariable('TURTLEBOT4_DIAGNOSTICS', default_value='true')
 
     pkg_turtlebot4_bringup = get_package_share_directory('turtlebot4_bringup')
     pkg_turtlebot4_diagnostics = get_package_share_directory('turtlebot4_diagnostics')
@@ -69,13 +73,15 @@ def generate_launch_description():
         launch_arguments=[('tf_prefix', 'oakd_pro')])
     description_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([description_launch_file]),
-        launch_arguments=[('model', 'standard')])
+        launch_arguments=[('model', 'standard')]
+    )
 
-    ld = LaunchDescription()
+    if (diagnostics_enable.perform(lc)) == 'true':
+        ld.add_action(diagnostics_launch)
+
     ld.add_action(param_file_cmd)
     ld.add_action(standard_launch)
     ld.add_action(teleop_launch)
-    ld.add_action(diagnostics_launch)
     ld.add_action(rplidar_launch)
     ld.add_action(oakd_launch)
     ld.add_action(description_launch)
