@@ -28,7 +28,7 @@ def generate_launch_description():
     lc = LaunchContext()
     ld = LaunchDescription()
 
-    diagnostics_enable = EnvironmentVariable('TURTLEBOT4_DIAGNOSTICS', default_value='true')
+    diagnostics_enable = EnvironmentVariable('TURTLEBOT4_DIAGNOSTICS', default_value='1')
 
     pkg_turtlebot4_bringup = get_package_share_directory('turtlebot4_bringup')
     pkg_turtlebot4_diagnostics = get_package_share_directory('turtlebot4_diagnostics')
@@ -76,7 +76,7 @@ def generate_launch_description():
         launch_arguments=[('model', 'standard')]
     )
 
-    if (diagnostics_enable.perform(lc)) == 'true':
+    if (diagnostics_enable.perform(lc)) == '1':
         ld.add_action(diagnostics_launch)
 
     ld.add_action(param_file_cmd)
