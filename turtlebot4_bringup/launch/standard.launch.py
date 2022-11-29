@@ -18,10 +18,26 @@
 
 from ament_index_python.packages import get_package_share_directory
 
+<<<<<<< HEAD
 from launch import LaunchContext, LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable
+=======
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, GroupAction
+from launch.conditions import LaunchConfigurationNotEquals
+>>>>>>> Use PushRosNamespace
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import EnvironmentVariable, LaunchConfiguration, PathJoinSubstitution
+
+from launch_ros.actions import PushRosNamespace
+
+from nav2_common.launch import RewrittenYaml
+
+
+ARGUMENTS = [
+    DeclareLaunchArgument('namespace', default_value='',
+                          description='Robot Namespace')
+]
 
 
 def generate_launch_description():
@@ -41,7 +57,14 @@ def generate_launch_description():
         description='Turtlebot4 Robot param file'
     )
 
-    turtlebot4_param_yaml_file = LaunchConfiguration('param_file')
+    param_file = LaunchConfiguration('param_file')
+    namespace = LaunchConfiguration('namespace')
+
+    namespaced_param_file = RewrittenYaml(
+        source_file=param_file,
+        root_key=namespace,
+        param_rewrites={},
+        convert_types=True)
 
     # Launch files
     turtlebot4_robot_launch_file = PathJoinSubstitution(
@@ -58,31 +81,38 @@ def generate_launch_description():
         [pkg_turtlebot4_description, 'launch', 'robot_description.launch.py']
     )
 
-    standard_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([turtlebot4_robot_launch_file]),
-        launch_arguments=[('model', 'standard'),
-                          ('param_file', turtlebot4_param_yaml_file)])
-    teleop_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([joy_teleop_launch_file]))
-    diagnostics_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([diagnostics_launch_file]))
-    rplidar_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([rplidar_launch_file]))
-    oakd_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([oakd_launch_file]),
-        launch_arguments=[('tf_prefix', 'oakd_pro')])
-    description_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([description_launch_file]),
-        launch_arguments=[('model', 'standard')]
-    )
+    actions = [
+            PushRosNamespace(
+                condition=LaunchConfigurationNotEquals('namespace', ''),
+                namespace=namespace),
+
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([turtlebot4_robot_launch_file]),
+                launch_arguments=[('model', 'standard'),
+                                ('param_file', namespaced_param_file)]),
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([joy_teleop_launch_file])),
+
+
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([rplidar_launch_file])),
+
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([oakd_launch_file]),
+                launch_arguments=[('tf_prefix', 'oakd_pro')]),
+
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([description_launch_file]),
+                launch_arguments=[('model', 'standard')]),
+        ]
 
     if (diagnostics_enable.perform(lc)) == '1':
-        ld.add_action(diagnostics_launch)
+        actions.append(IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([diagnostics_launch_file])))
+    
+    turtlebot4_standard = GroupAction(actions)
 
+    ld = LaunchDescription(ARGUMENTS)
     ld.add_action(param_file_cmd)
-    ld.add_action(standard_launch)
-    ld.add_action(teleop_launch)
-    ld.add_action(rplidar_launch)
-    ld.add_action(oakd_launch)
-    ld.add_action(description_launch)
+    ld.add_action(turtlebot4_standard)
     return ld
