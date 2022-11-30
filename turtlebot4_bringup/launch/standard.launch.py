@@ -18,14 +18,8 @@
 
 from ament_index_python.packages import get_package_share_directory
 
-<<<<<<< HEAD
 from launch import LaunchContext, LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable
-=======
-from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, GroupAction
-from launch.conditions import LaunchConfigurationNotEquals
->>>>>>> Use PushRosNamespace
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import EnvironmentVariable, LaunchConfiguration, PathJoinSubstitution
 
@@ -34,17 +28,12 @@ from launch_ros.actions import PushRosNamespace
 from nav2_common.launch import RewrittenYaml
 
 
-ARGUMENTS = [
-    DeclareLaunchArgument('namespace', default_value='',
-                          description='Robot Namespace')
-]
-
-
 def generate_launch_description():
     lc = LaunchContext()
     ld = LaunchDescription()
 
     diagnostics_enable = EnvironmentVariable('TURTLEBOT4_DIAGNOSTICS', default_value='1')
+    namespace = EnvironmentVariable('ROBOT_NAMESPACE', default_value='')
 
     pkg_turtlebot4_bringup = get_package_share_directory('turtlebot4_bringup')
     pkg_turtlebot4_diagnostics = get_package_share_directory('turtlebot4_diagnostics')
@@ -58,7 +47,6 @@ def generate_launch_description():
     )
 
     param_file = LaunchConfiguration('param_file')
-    namespace = LaunchConfiguration('namespace')
 
     namespaced_param_file = RewrittenYaml(
         source_file=param_file,
@@ -82,17 +70,14 @@ def generate_launch_description():
     )
 
     actions = [
-            PushRosNamespace(
-                condition=LaunchConfigurationNotEquals('namespace', ''),
-                namespace=namespace),
+            PushRosNamespace(namespace),
 
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([turtlebot4_robot_launch_file]),
                 launch_arguments=[('model', 'standard'),
-                                ('param_file', namespaced_param_file)]),
+                                  ('param_file', namespaced_param_file)]),
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([joy_teleop_launch_file])),
-
 
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([rplidar_launch_file])),
@@ -108,11 +93,12 @@ def generate_launch_description():
 
     if (diagnostics_enable.perform(lc)) == '1':
         actions.append(IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([diagnostics_launch_file])))
-    
+                PythonLaunchDescriptionSource([diagnostics_launch_file]),
+                launch_arguments=[('namespace', namespace)]))
+
     turtlebot4_standard = GroupAction(actions)
 
-    ld = LaunchDescription(ARGUMENTS)
+    ld = LaunchDescription()
     ld.add_action(param_file_cmd)
     ld.add_action(turtlebot4_standard)
     return ld

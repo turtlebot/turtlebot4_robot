@@ -68,11 +68,11 @@ Leds::Leds(
         nh_->get_parameter("gpio.led_red_user_2").as_int())},
   };
 
-  leds_[Turtlebot4LedEnum::POWER]->create_subscription(nh_, "/hmi/led/_power");
-  leds_[Turtlebot4LedEnum::MOTORS]->create_subscription(nh_, "/hmi/led/_motors");
-  leds_[Turtlebot4LedEnum::COMMS]->create_subscription(nh_, "/hmi/led/_comms");
-  leds_[Turtlebot4LedEnum::WIFI]->create_subscription(nh_, "/hmi/led/_wifi");
-  leds_[Turtlebot4LedEnum::BATTERY]->create_subscription(nh_, "/hmi/led/_battery");
-  leds_[Turtlebot4LedEnum::USER_1]->create_subscription(nh_, "/hmi/led/_user1");
-  leds_[Turtlebot4LedEnum::USER_2]->create_subscription(nh_, "/hmi/led/_user2");
+  leds_[Turtlebot4LedEnum::POWER]->create_subscription(nh_, "hmi/led/_power");
+  leds_[Turtlebot4LedEnum::MOTORS]->create_subscription(nh_, "hmi/led/_motors");
+  leds_[Turtlebot4LedEnum::COMMS]->create_subscription(nh_, "hmi/led/_comms");
+  leds_[Turtlebot4LedEnum::WIFI]->create_subscription(nh_, "hmi/led/_wifi");
+  leds_[Turtlebot4LedEnum::BATTERY]->create_subscription(nh_, "hmi/led/_battery");
+  leds_[Turtlebot4LedEnum::USER_1]->create_subscription(nh_, "hmi/led/_user1");
+  leds_[Turtlebot4LedEnum::USER_2]->create_subscription(nh_, "hmi/led/_user2");
 }

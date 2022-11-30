@@ -39,7 +39,8 @@ def generate_launch_description():
     joy_node = Node(
         package='joy_linux',
         executable='joy_linux_node',
-        name='joy_linux_node'
+        name='joy_linux_node',
+        remappings=[('/diagnostics', 'diagnostics')]
     )
 
     teleop_twist_joy_node = Node(
