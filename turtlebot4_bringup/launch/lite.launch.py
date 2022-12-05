@@ -76,8 +76,10 @@ def generate_launch_description():
                 PythonLaunchDescriptionSource([turtlebot4_robot_launch_file]),
                 launch_arguments=[('model', 'lite'),
                                   ('param_file', namespaced_param_file)]),
+
             IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([joy_teleop_launch_file])),
+                PythonLaunchDescriptionSource([joy_teleop_launch_file]),
+                launch_arguments=[('namespace', namespace)]),
 
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([rplidar_launch_file])),

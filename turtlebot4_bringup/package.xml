@@ -17,6 +17,7 @@
   <depend>depthai_bridge</depend>
   <depend>depthai_examples</depend>
   <depend>joy_linux</depend>
+  <depend>nav2_common</depend>
   <depend>teleop_twist_joy</depend>
   <depend>tf2_ros</depend>
 

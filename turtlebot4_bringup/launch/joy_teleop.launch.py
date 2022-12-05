@@ -23,6 +23,8 @@ from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
 from launch_ros.actions import Node
 
+from nav2_common.launch import RewrittenYaml
+
 
 def generate_launch_description():
     pkg_turtlebot4_bringup = get_package_share_directory('turtlebot4_bringup')
@@ -34,7 +36,13 @@ def generate_launch_description():
         description='Turtlebot4 Joy teleop param file'
     )
 
-    controller_config = LaunchConfiguration('controller_config')
+    namespace = LaunchConfiguration('namespace')
+
+    controller_config = RewrittenYaml(
+        source_file=LaunchConfiguration('controller_config'),
+        root_key=namespace,
+        param_rewrites={},
+        convert_types=True)
 
     joy_node = Node(
         package='joy_linux',
