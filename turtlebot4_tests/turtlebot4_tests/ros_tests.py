@@ -26,14 +26,13 @@
 # Usage:
 #   ros2 run turtlebot4_tests ros_tests
 
-import os
-from os.path import expanduser
-
 import math
+import os
 import threading
 import time
+from os.path import expanduser
 
-from irobot_create_msgs.action import Dock, Undock, DriveDistance, RotateAngle
+from irobot_create_msgs.action import Dock, DriveDistance, RotateAngle, Undock
 from irobot_create_msgs.msg import DockStatus, InterfaceButtons, LightringLeds
 
 from nav_msgs.msg import Odometry
@@ -47,9 +46,9 @@ from std_msgs.msg import String
 
 from turtlebot4_msgs.msg import UserButton, UserLed
 
-from turtlebot4_tests.test_tools import boolTestResults, logTestResults, notApplicableTestResult
-from turtlebot4_tests.test_tools import printTestResults, Tester, userInputTestResults
-from turtlebot4_tests.test_tools import euler_from_quaternion
+from turtlebot4_tests.test_tools import (boolTestResults, euler_from_quaternion,
+                                         logTestResults, notApplicableTestResult,
+                                         printTestResults, Tester, userInputTestResults)
 
 
 class Turtlebot4RosTests(Node):

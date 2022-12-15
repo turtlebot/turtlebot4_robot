@@ -18,9 +18,10 @@
 
 import math
 import os
-import psutil
 import subprocess
 import time
+
+import psutil
 
 
 class TestResult:
