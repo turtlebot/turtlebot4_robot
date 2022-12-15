@@ -28,9 +28,9 @@
 
 import math
 import os
+from os.path import expanduser
 import threading
 import time
-from os.path import expanduser
 
 from irobot_create_msgs.action import Dock, DriveDistance, RotateAngle, Undock
 from irobot_create_msgs.msg import DockStatus, InterfaceButtons, LightringLeds
