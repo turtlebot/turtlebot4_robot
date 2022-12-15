@@ -51,63 +51,63 @@ class Turtlebot4DiagnosticUpdater(Node):
         # Subscribe to topics
         self.battery_sub = self.create_subscription(
             BatteryState,
-            '/battery_state',
+            'battery_state',
             self.battery_status_callback,
             qos_profile_sensor_data
         )
 
         self.wheel_sub = self.create_subscription(
             WheelStatus,
-            '/wheel_status',
+            'wheel_status',
             self.wheel_status_callback,
             qos_profile_sensor_data
         )
 
         self.dock_sub = self.create_subscription(
             DockStatus,
-            '/dock_status',
+            'dock_status',
             self.dock_callback,
             qos_profile_sensor_data
         )
 
         self.lidar_sub = self.create_subscription(
             LaserScan,
-            '/scan',
+            'scan',
             self.lidar_callback,
             qos_profile_sensor_data
         )
 
         self.stereo_depth_sub = self.create_subscription(
             Image,
-            '/stereo/depth',
+            'stereo/depth',
             self.stereo_depth_callback,
             qos_profile_sensor_data
         )
 
         self.color_image_sub = self.create_subscription(
             Image,
-            '/color/preview/image',
+            'color/preview/image',
             self.color_image_callback,
             qos_profile_sensor_data
         )
 
         self.hazard_detection_sub = self.create_subscription(
             HazardDetectionVector,
-            '/hazard_detection',
+            'hazard_detection',
             self.hazard_detection_callback,
             qos_profile_sensor_data
         )
 
         self.imu_sub = self.create_subscription(
             Imu,
-            '/imu',
+            'imu',
             self.imu_callback,
             qos_profile_sensor_data
         )
 
         self.imu_sub = self.create_subscription(
             Mouse,
-            '/mouse',
+            'mouse',
             self.mouse_callback,
             qos_profile_sensor_data
         )

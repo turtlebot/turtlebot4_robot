@@ -18,9 +18,9 @@
 
 import math
 import os
-import sys
-import time
 import subprocess
+import time
+
 import psutil
 
 
@@ -106,7 +106,7 @@ class Tester():
     def rosbag_record(self, index):
         self.rosbag_process = subprocess.Popen(
             'exec ' + 'ros2 bag record -o {0}/rosbag2/{1}-{2} -a'.format(
-                self.results_dir, self.tests[index].name.replace(" ", "_"),
+                self.results_dir, self.tests[index].name.replace(' ', '_'),
                 self.tests[index].count),
             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True)
 
@@ -192,7 +192,8 @@ def logTestResults(file, name, results):
 
 def euler_from_quaternion(quaternion):
     """
-    Converts quaternion (w in last place) to euler roll, pitch, yaw
+    Convert a quaternion (w in last place) to euler roll, pitch, yaw.
+
     quaternion = [x, y, z, w]
     """
     x = quaternion.x

@@ -19,15 +19,15 @@
 #ifndef TURTLEBOT4_BASE__TURTLEBOT4_HPP_
 #define TURTLEBOT4_BASE__TURTLEBOT4_HPP_
 
-#include <rclcpp/rclcpp.hpp>
-#include <sensor_msgs/msg/battery_state.hpp>
-#include <std_msgs/msg/string.hpp>
-
 #include <chrono>
 #include <map>
 #include <memory>
 #include <string>
 #include <vector>
+
+#include <rclcpp/rclcpp.hpp>
+#include <sensor_msgs/msg/battery_state.hpp>
+#include <std_msgs/msg/string.hpp>
 
 #include "turtlebot4_base/display.hpp"
 #include "turtlebot4_base/buttons.hpp"
@@ -47,7 +47,7 @@ class Turtlebot4 : public rclcpp::Node
 {
 public:
   // Constructor and Destructor
-  explicit Turtlebot4();
+  Turtlebot4();
   virtual ~Turtlebot4() {}
 
 private:

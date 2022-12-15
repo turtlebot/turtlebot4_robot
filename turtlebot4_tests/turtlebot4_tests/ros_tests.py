@@ -26,33 +26,29 @@
 # Usage:
 #   ros2 run turtlebot4_tests ros_tests
 
+import math
 import os
 from os.path import expanduser
-from re import L
-
-
 import threading
 import time
-import math
-import psutil
 
-from irobot_create_msgs.action import DockServo, Undock, DriveDistance, RotateAngle
-from irobot_create_msgs.msg import Dock, InterfaceButtons, LightringLeds
+from irobot_create_msgs.action import Dock, DriveDistance, RotateAngle, Undock
+from irobot_create_msgs.msg import DockStatus, InterfaceButtons, LightringLeds
 
 from nav_msgs.msg import Odometry
 
 import rclpy
 from rclpy.action import ActionClient
 from rclpy.node import Node
-from rclpy.qos import qos_profile_sensor_data, qos_profile_system_default
+from rclpy.qos import qos_profile_sensor_data
 
 from std_msgs.msg import String
 
 from turtlebot4_msgs.msg import UserButton, UserLed
 
-from turtlebot4_tests.test_tools import boolTestResults, logTestResults, notApplicableTestResult
-from turtlebot4_tests.test_tools import printTestResults, Tester, userInputTestResults
-from turtlebot4_tests.test_tools import euler_from_quaternion
+from turtlebot4_tests.test_tools import (boolTestResults, euler_from_quaternion,
+                                         logTestResults, notApplicableTestResult,
+                                         printTestResults, Tester, userInputTestResults)
 
 
 class Turtlebot4RosTests(Node):
@@ -82,8 +78,6 @@ class Turtlebot4RosTests(Node):
         self.tester.addTest('User Button Test', self.userButtonTest)
         self.tester.addTest('TurtleBot 4 Lite Tests', self.liteTests)
         self.tester.addTest('TurtleBot 4 Tests', self.standardTests)
-
-    
 
     def lightRingTest(self):
         results = []
@@ -285,7 +279,10 @@ class Turtlebot4RosTests(Node):
         response_delay = 1
         print('Testing the display... \n')
 
-        display_pub = self.create_publisher(String, '/hmi/display/message', qos_profile_sensor_data)
+        display_pub = self.create_publisher(
+                        String,
+                        '/hmi/display/message',
+                        qos_profile_sensor_data)
         time.sleep(response_delay)
 
         msg = String()
@@ -342,14 +339,14 @@ class Turtlebot4RosTests(Node):
         results = []
         self.is_docked = False
 
-        dock_sub = self.create_subscription(Dock,
-                                            '/dock',
+        dock_sub = self.create_subscription(DockStatus,
+                                            '/dock_status',
                                             self.dockCallback,
                                             qos_profile_sensor_data)
         undock_action_client = ActionClient(self, Undock, '/undock')
-        dock_action_client = ActionClient(self, DockServo, '/dock')
+        dock_action_client = ActionClient(self, Dock, '/dock')
         undock_goal_msg = Undock.Goal()
-        dock_goal_msg = DockServo.Goal()
+        dock_goal_msg = Dock.Goal()
 
         time.sleep(1)
 
@@ -405,7 +402,6 @@ class Turtlebot4RosTests(Node):
         drive_goal_msg.distance = drive_distance
         rotate_goal_msg = RotateAngle.Goal()
         rotate_goal_msg.angle = rotate_angle
-
 
         dock_sub = self.create_subscription(Odometry,
                                             '/odom',

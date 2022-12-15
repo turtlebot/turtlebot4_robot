@@ -64,4 +64,3 @@ void Buttons::spin_once()
 
   hmi_buttons_pub_->publish(std::move(button_msg));
 }
-

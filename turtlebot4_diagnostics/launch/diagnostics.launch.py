@@ -18,9 +18,11 @@
 from ament_index_python.packages import get_package_share_directory
 
 import launch
-from launch.substitutions import PathJoinSubstitution
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
 from launch_ros.actions import Node
+
+from nav2_common.launch import RewrittenYaml
 
 
 def generate_launch_description():
@@ -30,15 +32,31 @@ def generate_launch_description():
     analyzer_params_filepath = PathJoinSubstitution(
         [pkg_turtlebot4_diagnostics, 'config', 'diagnostics.yaml'])
 
+    namespaced_param_file = RewrittenYaml(
+        source_file=analyzer_params_filepath,
+        root_key=LaunchConfiguration('namespace'),
+        param_rewrites={},
+        convert_types=True)
+
     aggregator = Node(
         package='diagnostic_aggregator',
         executable='aggregator_node',
         output='screen',
-        parameters=[analyzer_params_filepath])
+        parameters=[namespaced_param_file],
+        remappings=[
+            ('/diagnostics', 'diagnostics'),
+            ('/diagnostics_agg', 'diagnostics_agg'),
+            ('/diagnostics_toplevel_state', 'diagnostics_toplevel_state')
+        ])
     diag_publisher = Node(
          package='turtlebot4_diagnostics',
          executable='diagnostics_updater',
-         output='screen')
+         output='screen',
+         remappings=[
+            ('/diagnostics', 'diagnostics'),
+            ('/diagnostics_agg', 'diagnostics_agg'),
+            ('/diagnostics_toplevel_state', 'diagnostics_toplevel_state')]
+        )
     return launch.LaunchDescription([
         aggregator,
         diag_publisher,
