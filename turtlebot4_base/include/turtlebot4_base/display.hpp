@@ -19,11 +19,11 @@
 #ifndef TURTLEBOT4_BASE__DISPLAY_HPP_
 #define TURTLEBOT4_BASE__DISPLAY_HPP_
 
-#include <rclcpp/rclcpp.hpp>
-
 #include <memory>
 #include <string>
 #include <vector>
+
+#include <rclcpp/rclcpp.hpp>
 
 #include "turtlebot4_base/ssd1306.hpp"
 #include "turtlebot4_base/buttons.hpp"
@@ -38,13 +38,13 @@ class Display
 public:
   // Constructor and Destructor
   Display(
-    std::shared_ptr<rclcpp::Node> & nh, 
+    std::shared_ptr<rclcpp::Node> & nh,
     std::shared_ptr<I2cInterface> i2c,
     std::shared_ptr<GpioInterface> gpio);
   virtual ~Display() {}
 
 private:
-  void display_callback(const turtlebot4_msgs::msg::UserDisplay::SharedPtr  msg);
+  void display_callback(const turtlebot4_msgs::msg::UserDisplay::SharedPtr msg);
 
   // Node handle
   std::shared_ptr<rclcpp::Node> nh_;
@@ -54,6 +54,6 @@ private:
   Ssd1306 oled_;
 };
 
-}  // namespace turtlebot4
+}  // namespace turtlebot4_base
 
 #endif  // TURTLEBOT4_BASE__DISPLAY_HPP_

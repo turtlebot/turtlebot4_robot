@@ -62,8 +62,8 @@ ARGUMENTS = [
         description='Height of preview image')
 ]
 
-def generate_launch_description():
 
+def generate_launch_description():
     pkg_depthai_examples = get_package_share_directory('depthai_examples')
 
     rgb_stereo_launch_file = PathJoinSubstitution(

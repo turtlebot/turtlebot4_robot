@@ -19,18 +19,17 @@
 #ifndef TURTLEBOT4_BASE__LEDS_HPP_
 #define TURTLEBOT4_BASE__LEDS_HPP_
 
-#include <rclcpp/rclcpp.hpp>
 #include <chrono>
 #include <map>
 #include <memory>
 #include <string>
 
+#include <rclcpp/rclcpp.hpp>
+#include "std_msgs/msg/int32.hpp"
+
 #include "turtlebot4_msgs/msg/user_led.hpp"
 #include "turtlebot4_base/gpio_interface.hpp"
-
 #include "turtlebot4_node/utils.hpp"
-
-#include "std_msgs/msg/int32.hpp"
 
 namespace turtlebot4_base
 {
@@ -56,7 +55,8 @@ struct Turtlebot4Led
   }
 
   // Red Green constructor
-  Turtlebot4Led(std::shared_ptr<GpioInterface> gpio_interface,
+  Turtlebot4Led(
+    std::shared_ptr<GpioInterface> gpio_interface,
     uint8_t green_pin, uint8_t red_pin)
   : type_(Turtlebot4LedType::RED_GREEN),
     gpio_interface_(gpio_interface),
@@ -69,7 +69,10 @@ struct Turtlebot4Led
 
   void create_subscription(rclcpp::Node::SharedPtr nh, std::string topic)
   {
-    led_sub_ = nh->create_subscription<std_msgs::msg::Int32>(topic, rclcpp::QoS(rclcpp::KeepLast(10)), std::bind(&Turtlebot4Led::led_callback, this, std::placeholders::_1));
+    led_sub_ = nh->create_subscription<std_msgs::msg::Int32>(
+      topic, rclcpp::QoS(
+        rclcpp::KeepLast(
+          10)), std::bind(&Turtlebot4Led::led_callback, this, std::placeholders::_1));
   }
 
   void led_callback(const std_msgs::msg::Int32::SharedPtr msg)

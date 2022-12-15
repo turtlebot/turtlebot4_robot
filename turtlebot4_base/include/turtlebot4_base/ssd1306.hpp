@@ -248,7 +248,7 @@ public:
 
 private:
   void HandleRet(int8_t ret);
-  
+
   std::shared_ptr<I2cInterface> i2c_interface_;
   uint8_t device_id_;
   uint8_t error_count_;
