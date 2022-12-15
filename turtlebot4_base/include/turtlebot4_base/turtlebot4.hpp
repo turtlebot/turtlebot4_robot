@@ -47,7 +47,7 @@ class Turtlebot4 : public rclcpp::Node
 {
 public:
   // Constructor and Destructor
-  void Turtlebot4();
+  Turtlebot4();
   virtual ~Turtlebot4() {}
 
 private:
