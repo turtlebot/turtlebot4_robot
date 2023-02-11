@@ -2,34 +2,41 @@ turtlebot4_node:
   ros__parameters:
     wifi:
       interface: "wlan0"
-      
-      # Supported Functions:
-      # Dock
-      # Undock
-      # Wall Follow Left
-      # Wall Follow Right
-      # Power
-      # EStop
-      # RPLIDAR Motor
 
-      # Menu Functions:
-      # Scroll Up
-      # Scroll Down
-      # Back
-      # Select
-      # Help
+    # Setting power_saver to True will make the TurtleBot 4
+    # disable the camera and lidar while docked
+    power_saver: True  
 
-      # Buttons:
-      # create3_1
-      # create3_power
-      # create3_2
-      # hmi_1
-      # hmi_2
-      # hmi_3
-      # hmi_4
+    # Supported Functions:
+    # Dock
+    # Undock
+    # Wall Follow Left
+    # Wall Follow Right
+    # Power
+    # EStop
+    # RPLIDAR Stop
+    # RPLIDAR Start
+    # OAKD Stop
+    # OAKD Start
 
-      # Format:
-      # button: ["SHORT_PRESS_FUNC", "LONG_PRESS_FUNC", "LONG_PRESS_DURATION_MS"]
+    # Menu Functions:
+    # Scroll Up
+    # Scroll Down
+    # Back
+    # Select
+    # Help
+
+    # Buttons:
+    # create3_1
+    # create3_power
+    # create3_2
+    # hmi_1
+    # hmi_2
+    # hmi_3
+    # hmi_4
+
+    # Format:
+    # button: ["SHORT_PRESS_FUNC", "LONG_PRESS_FUNC", "LONG_PRESS_DURATION_MS"]
 
     buttons:  
       create3_1: ["Dock", "Wall Follow Left", "2000"]
@@ -43,7 +50,7 @@ turtlebot4_node:
 
       # Menu entry must match a function
     menu:
-      entries: ["Dock", "Undock", "EStop", "Wall Follow Left", "Wall Follow Right", "RPLIDAR Motor", "Power", "Help"]
+      entries: ["Dock", "Undock", "EStop", "Wall Follow Left", "Wall Follow Right", "Power", "Help"]
 
     # Controller button functions
     # Buttons:
@@ -56,7 +63,6 @@ turtlebot4_node:
       a: ["Select"]
       b: ["EStop"]
       x: ["Back"]
-      y: ["RPLIDAR Motor"]
       up: ["Scroll Up"]
       down: ["Scroll Down"]
       l2: ["Wall Follow Left"]
