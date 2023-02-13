@@ -11,14 +11,12 @@
       i_fps: 30.0
       i_height: 720
       i_interleaved: false
-      i_max_q_size: 30
+      i_max_q_size: 10
       i_preview_size: 250
       i_enable_preview: true
+      i_low_bandwidth: true
       i_keep_preview_aspect_ratio: true
       i_publish_topic: true
       i_resolution: '1080'
       i_width: 1280
-    stereo:
-      i_height: 480
-      i_width: 640
     use_sim_time: false

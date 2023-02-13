@@ -23,12 +23,15 @@ from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
 
+from nav2_common.launch import RewrittenYaml
+
 
 def generate_launch_description():
     pkg_turtlebot4_bringup = get_package_share_directory('turtlebot4_bringup')
 
     camera = LaunchConfiguration('camera')
     params_file = LaunchConfiguration('params_file')
+    namespace = LaunchConfiguration('namespace')
 
     ARGUMENTS = [
         DeclareLaunchArgument('camera', default_value='oakd_pro'),
@@ -37,9 +40,15 @@ def generate_launch_description():
                                 [pkg_turtlebot4_bringup, 'config', camera]), '.yaml'])
     ]
 
+    namespaced_param_file = RewrittenYaml(
+        source_file=params_file,
+        root_key=namespace,
+        param_rewrites={},
+        convert_types=True)
+
     node = ComposableNodeContainer(
             name='oakd_container',
-            namespace='',
+            namespace=namespace,
             package='rclcpp_components',
             executable='component_container',
             composable_node_descriptions=[
@@ -47,7 +56,7 @@ def generate_launch_description():
                         package='depthai_ros_driver',
                         plugin='depthai_ros_driver::Camera',
                         name='oakd',
-                        parameters=[params_file]
+                        parameters=[namespaced_param_file]
                     ),
             ],
             output='screen',
