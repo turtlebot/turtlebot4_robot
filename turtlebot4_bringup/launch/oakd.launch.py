@@ -15,71 +15,53 @@
 #
 # @author Roni Kreinin (rkreinin@clearpathrobotics.com)
 
-
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
-from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch_ros.actions import ComposableNodeContainer
+from launch_ros.descriptions import ComposableNode
 
-
-ARGUMENTS = [
-    DeclareLaunchArgument(
-        'tf_prefix',
-        default_value='oakd_pro',
-        description='The name of the camera. \
-                     It can be different from the camera model \
-                     and it will be used in naming TF.'),
-    DeclareLaunchArgument(
-        'publish_urdf',
-        default_value='False',
-        description='Whether to publish the urdf'),
-    DeclareLaunchArgument(
-        'colorResolution',
-        choices=['1080p', '4K'],
-        default_value='1080p',
-        description='The resolution of the color camera'),
-    DeclareLaunchArgument(
-        'useVideo',
-        default_value='False',
-        description='Whether to publish a video of color image'),
-    DeclareLaunchArgument(
-        'usePreview',
-        default_value='True',
-        description='Whether to publish a preview of color image'),
-    DeclareLaunchArgument(
-        'useDepth',
-        default_value='True',
-        description='Whether to publish the depth image'),
-    DeclareLaunchArgument(
-        'previewWidth',
-        default_value='250',
-        description='Width of preview image'),
-    DeclareLaunchArgument(
-        'previewHeight',
-        default_value='250',
-        description='Height of preview image')
-]
+from nav2_common.launch import RewrittenYaml
 
 
 def generate_launch_description():
-    pkg_depthai_examples = get_package_share_directory('depthai_examples')
+    pkg_turtlebot4_bringup = get_package_share_directory('turtlebot4_bringup')
 
-    rgb_stereo_launch_file = PathJoinSubstitution(
-        [pkg_depthai_examples, 'launch', 'rgb_stereo_node.launch.py'])
+    camera = LaunchConfiguration('camera')
+    params_file = LaunchConfiguration('params_file')
+    namespace = LaunchConfiguration('namespace')
 
-    oakd_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([rgb_stereo_launch_file]),
-        launch_arguments={'colorResolution': LaunchConfiguration('colorResolution'),
-                          'useVideo': LaunchConfiguration('useVideo'),
-                          'usePreview': LaunchConfiguration('usePreview'),
-                          'useDepth': LaunchConfiguration('useDepth'),
-                          'previewWidth': LaunchConfiguration('previewWidth'),
-                          'previewHeight': LaunchConfiguration('previewHeight'),
-                          'publish_urdf': LaunchConfiguration('publish_urdf'),
-                          'tf_prefix': LaunchConfiguration('tf_prefix')}.items())
+    ARGUMENTS = [
+        DeclareLaunchArgument('camera', default_value='oakd_pro'),
+        DeclareLaunchArgument('params_file',
+                              default_value=[PathJoinSubstitution(
+                                [pkg_turtlebot4_bringup, 'config', camera]), '.yaml'])
+    ]
+
+    namespaced_param_file = RewrittenYaml(
+        source_file=params_file,
+        root_key=namespace,
+        param_rewrites={},
+        convert_types=True)
+
+    node = ComposableNodeContainer(
+            name='oakd_container',
+            namespace=namespace,
+            package='rclcpp_components',
+            executable='component_container',
+            composable_node_descriptions=[
+                    ComposableNode(
+                        package='depthai_ros_driver',
+                        plugin='depthai_ros_driver::Camera',
+                        name='oakd',
+                        parameters=[namespaced_param_file]
+                    ),
+            ],
+            output='screen',
+        )
 
     ld = LaunchDescription(ARGUMENTS)
-    ld.add_action(oakd_launch)
+    ld.add_action(node)
     return ld

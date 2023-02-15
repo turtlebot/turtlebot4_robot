@@ -86,7 +86,7 @@ def generate_launch_description():
 
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([oakd_launch_file]),
-                launch_arguments=[('tf_prefix', 'oakd_pro')]),
+                launch_arguments=[('camera', 'oakd_pro')]),
 
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([description_launch_file]),

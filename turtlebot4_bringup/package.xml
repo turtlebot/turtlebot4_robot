@@ -13,9 +13,10 @@
   <depend>turtlebot4_description</depend>
   <depend>turtlebot4_diagnostics</depend>
   <depend>rplidar_ros</depend>
-  <depend>depthai_ros_msgs</depend>
   <depend>depthai_bridge</depend>
   <depend>depthai_examples</depend>
+  <depend>depthai_ros_driver</depend>
+  <depend>depthai_ros_msgs</depend>
   <depend>joy_linux</depend>
   <depend>nav2_common</depend>
   <depend>teleop_twist_joy</depend>
