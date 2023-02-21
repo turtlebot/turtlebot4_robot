@@ -2,8 +2,8 @@
 Changelog for package turtlebot4_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.0 (2023-02-21)
+------------------
 * Updates for new DepthAI node.
 * Updated turtlebot4_node config
 * Namespacing
