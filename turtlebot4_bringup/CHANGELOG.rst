@@ -2,6 +2,18 @@
 Changelog for package turtlebot4_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Updates for new DepthAI node.
+* Updated turtlebot4_node config
+* Namespacing
+* Flake8 fixes
+* Linter fixes
+* Enable auto_standby for RPLiDAR.
+* Enable or disable diagnostics based on TURTLEBOT4_DIAGNOSTICS environment variable.
+* Launch joy_teleop_launch.py in Turtlebot4 Lite.
+* Contributors: Joey Yang, Roni Kreinin
+
 0.1.3 (2022-09-15)
 ------------------
 * Added RPLIDAR Motor function to config

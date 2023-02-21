@@ -2,6 +2,12 @@
 Changelog for package turtlebot4_diagnostics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Namespacing
+* Minor fixes for Humble
+* Contributors: Roni Kreinin
+
 0.1.3 (2022-09-15)
 ------------------
 
