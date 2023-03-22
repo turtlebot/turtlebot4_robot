@@ -2,6 +2,11 @@
 Changelog for package turtlebot4_tests
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fixed rosbag record subprocess
+* Contributors: Roni Kreinin
+
 1.0.0 (2023-02-21)
 ------------------
 * Namespacing

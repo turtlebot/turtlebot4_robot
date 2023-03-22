@@ -2,6 +2,9 @@
 Changelog for package turtlebot4_base
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.0.0 (2023-02-21)
 ------------------
 * Namespacing
