@@ -108,7 +108,10 @@ class Tester():
             'exec ' + 'ros2 bag record -o {0}/rosbag2/{1}-{2} -a'.format(
                 self.results_dir, self.tests[index].name.replace(' ', '_'),
                 self.tests[index].count),
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True)
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            shell=True)
 
     def rosbag_stop(self):
         parent = psutil.Process(self.rosbag_process.pid)
