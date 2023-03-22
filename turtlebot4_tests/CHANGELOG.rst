@@ -2,8 +2,8 @@
 Changelog for package turtlebot4_tests
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.1 (2023-03-22)
+------------------
 * Fixed rosbag record subprocess
 * Contributors: Roni Kreinin
 
