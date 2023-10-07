@@ -31,7 +31,7 @@ def generate_launch_description():
 
     camera = LaunchConfiguration('camera')
     params_file = LaunchConfiguration('params_file')
-    namespace = ""
+    namespace = ''
 
     ARGUMENTS = [
         DeclareLaunchArgument('camera', default_value='oakd_pro'),
