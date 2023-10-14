@@ -31,13 +31,15 @@ def generate_launch_description():
 
     camera = LaunchConfiguration('camera')
     params_file = LaunchConfiguration('params_file')
-    namespace = ''
+    namespace = LaunchConfiguration('namespace')
 
     ARGUMENTS = [
         DeclareLaunchArgument('camera', default_value='oakd_pro'),
         DeclareLaunchArgument('params_file',
                               default_value=[PathJoinSubstitution(
-                                [pkg_turtlebot4_bringup, 'config', camera]), '.yaml'])
+                                [pkg_turtlebot4_bringup, 'config', camera]), '.yaml']),
+        DeclareLaunchArgument('namespace', default_value='',
+                          description='Robot namespace')
     ]
 
     namespaced_param_file = RewrittenYaml(
