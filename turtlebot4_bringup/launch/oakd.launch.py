@@ -39,7 +39,7 @@ def generate_launch_description():
                               default_value=[PathJoinSubstitution(
                                 [pkg_turtlebot4_bringup, 'config', camera]), '.yaml']),
         DeclareLaunchArgument('namespace', default_value='',
-                              description='Robot namespace'),
+                              description='Robot namespace')
     ]
 
     namespaced_param_file = RewrittenYaml(
