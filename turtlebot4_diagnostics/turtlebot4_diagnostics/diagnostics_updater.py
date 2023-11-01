@@ -86,7 +86,7 @@ class Turtlebot4DiagnosticUpdater(Node):
 
         self.color_image_sub = self.create_subscription(
             Image,
-            'color/preview/image',
+            'oakd/rgb/preview/image_raw',
             self.color_image_callback,
             qos_profile_sensor_data
         )
