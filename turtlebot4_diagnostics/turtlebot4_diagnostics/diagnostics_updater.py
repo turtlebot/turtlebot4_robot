@@ -120,7 +120,7 @@ class Turtlebot4DiagnosticUpdater(Node):
         self.dock_visible = False
         self.lidar_freq_bounds = {'min': 5, 'max': 10}
         self.camera_freq_bounds = {'min': 5, 'max': 60}
-        self.imu_freq_bounds = {'min': 61, 'max': 63}
+        self.imu_freq_bounds = {'min': 100, 'max': 100}
         self.mouse_freq_bounds = {'min': 61, 'max': 63}
         self.detections = []
 
