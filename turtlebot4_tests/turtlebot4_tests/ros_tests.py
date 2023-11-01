@@ -56,6 +56,9 @@ class Turtlebot4RosTests(Node):
     def __init__(self):
         super().__init__('turtlebot4_ros_tests')
 
+        self.declare_parameter('rosbag', False)
+        self.rosbag_enable = self.get_parameter('rosbag').get_parameter_value().bool_value
+
         self.results_dir = expanduser('~') + \
             '/turtlebot4_test_results/' + \
             time.strftime('%Y_%m_%d-%H_%M_%S')
@@ -66,7 +69,7 @@ class Turtlebot4RosTests(Node):
 
         print('Saving results to ' + self.results_dir)
 
-        self.tester = Tester(self.results_dir)
+        self.tester = Tester(self.results_dir, self.rosbag_enable)
 
         # Add tests
         self.tester.addTest('Light Ring Test', self.lightRingTest)

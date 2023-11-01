@@ -44,8 +44,9 @@ class Tester():
     processes = []
     rosbag_count = 0
 
-    def __init__(self, results_dir):
+    def __init__(self, results_dir, rosbag_enable):
         self.results_dir = results_dir
+        self.rosbag_enable = rosbag_enable
 
     def addTest(self, name, func):
         self.tests.append(Test(name, func))
@@ -61,8 +62,8 @@ class Tester():
         print(dash)
 
         status = False
-
-        self.rosbag_record(index)
+        if self.rosbag_enable:
+            self.rosbag_record(index)
         # Enables automatic rerunning of test if test execution failed
         try:
             while not status:
@@ -71,7 +72,8 @@ class Tester():
         except KeyboardInterrupt:
             pass
 
-        self.rosbag_stop()
+        if self.rosbag_enable:
+            self.rosbag_stop()
 
     def showTestOptions(self):
         # Format
