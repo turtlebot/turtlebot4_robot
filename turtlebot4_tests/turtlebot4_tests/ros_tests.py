@@ -85,7 +85,7 @@ class Turtlebot4RosTests(Node):
         response_delay = 1
         print('Testing Create3 Light Ring... \n')
 
-        pub = self.create_publisher(LightringLeds, '/cmd_lightring', qos_profile_sensor_data)
+        pub = self.create_publisher(LightringLeds, 'cmd_lightring', qos_profile_sensor_data)
         time.sleep(response_delay)
 
         msg = LightringLeds()
@@ -176,7 +176,7 @@ class Turtlebot4RosTests(Node):
         self.create_button_msg = InterfaceButtons()
 
         create_button_sub = self.create_subscription(InterfaceButtons,
-                                                     '/interface_buttons',
+                                                     'interface_buttons',
                                                      self.createButtonCallback,
                                                      qos_profile_sensor_data)
         time.sleep(response_delay)
@@ -207,7 +207,7 @@ class Turtlebot4RosTests(Node):
         response_delay = 1
         print('Testing User LEDs... \n')
 
-        user_led_pub = self.create_publisher(UserLed, '/hmi/led', qos_profile_sensor_data)
+        user_led_pub = self.create_publisher(UserLed, 'hmi/led', qos_profile_sensor_data)
         time.sleep(response_delay)
 
         msg = UserLed()
@@ -281,7 +281,7 @@ class Turtlebot4RosTests(Node):
 
         display_pub = self.create_publisher(
                         String,
-                        '/hmi/display/message',
+                        'hmi/display/message',
                         qos_profile_sensor_data)
         time.sleep(response_delay)
 
@@ -313,7 +313,7 @@ class Turtlebot4RosTests(Node):
         self.button_msg = UserButton()
 
         user_button_sub = self.create_subscription(UserButton,
-                                                   '/hmi/buttons',
+                                                   'hmi/buttons',
                                                    self.userButtonCallback,
                                                    qos_profile_sensor_data)
         time.sleep(response_delay)
@@ -340,11 +340,11 @@ class Turtlebot4RosTests(Node):
         self.is_docked = False
 
         dock_sub = self.create_subscription(DockStatus,
-                                            '/dock_status',
+                                            'dock_status',
                                             self.dockCallback,
                                             qos_profile_sensor_data)
-        undock_action_client = ActionClient(self, Undock, '/undock')
-        dock_action_client = ActionClient(self, Dock, '/dock')
+        undock_action_client = ActionClient(self, Undock, 'undock')
+        dock_action_client = ActionClient(self, Dock, 'dock')
         undock_goal_msg = Undock.Goal()
         dock_goal_msg = Dock.Goal()
 
@@ -396,15 +396,15 @@ class Turtlebot4RosTests(Node):
         drive_distance = 0.25
         rotate_angle = math.pi/2
 
-        drive_action_client = ActionClient(self, DriveDistance, '/drive_distance')
-        rotate_action_client = ActionClient(self, RotateAngle, '/rotate_angle')
+        drive_action_client = ActionClient(self, DriveDistance, 'drive_distance')
+        rotate_action_client = ActionClient(self, RotateAngle, 'rotate_angle')
         drive_goal_msg = DriveDistance.Goal()
         drive_goal_msg.distance = drive_distance
         rotate_goal_msg = RotateAngle.Goal()
         rotate_goal_msg.angle = rotate_angle
 
         dock_sub = self.create_subscription(Odometry,
-                                            '/odom',
+                                            'odom',
                                             self.odomCallback,
                                             qos_profile_sensor_data)
 
