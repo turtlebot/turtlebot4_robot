@@ -77,16 +77,9 @@ class Turtlebot4DiagnosticUpdater(Node):
             qos_profile_sensor_data
         )
 
-        self.stereo_depth_sub = self.create_subscription(
-            Image,
-            'stereo/depth',
-            self.stereo_depth_callback,
-            qos_profile_sensor_data
-        )
-
         self.color_image_sub = self.create_subscription(
             Image,
-            'color/preview/image',
+            'oakd/rgb/preview/image_raw',
             self.color_image_callback,
             qos_profile_sensor_data
         )
@@ -120,7 +113,7 @@ class Turtlebot4DiagnosticUpdater(Node):
         self.dock_visible = False
         self.lidar_freq_bounds = {'min': 5, 'max': 10}
         self.camera_freq_bounds = {'min': 5, 'max': 60}
-        self.imu_freq_bounds = {'min': 61, 'max': 63}
+        self.imu_freq_bounds = {'min': 100, 'max': 100}
         self.mouse_freq_bounds = {'min': 61, 'max': 63}
         self.detections = []
 
@@ -136,11 +129,6 @@ class Turtlebot4DiagnosticUpdater(Node):
                                                     self.updater,
                                                     FrequencyStatusParam(
                                                         self.lidar_freq_bounds, 0.1, 10))
-
-        self.stereo_depth_freq = HeaderlessTopicDiagnostic('/stereo/depth',
-                                                           self.updater,
-                                                           FrequencyStatusParam(
-                                                               self.camera_freq_bounds, 0.1, 10))
 
         self.color_image_freq = HeaderlessTopicDiagnostic('/color/preview/image',
                                                           self.updater,
@@ -234,9 +222,6 @@ class Turtlebot4DiagnosticUpdater(Node):
 
     def lidar_callback(self, msg):
         self.lidar_freq.tick()
-
-    def stereo_depth_callback(self, msg):
-        self.stereo_depth_freq.tick()
 
     def color_image_callback(self, msg):
         self.color_image_freq.tick()
