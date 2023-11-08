@@ -2,6 +2,12 @@
 Changelog for package turtlebot4_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge pull request <https://github.com/turtlebot/turtlebot4_robot/issues/24>
+  Fix: Oak-D parameters to use custom config file and Fixed launch file error
+* Contributors: Harish Kumar Balaji, Roni Kreinin
+
 1.0.1 (2023-03-22)
 ------------------
 

@@ -2,6 +2,14 @@
 Changelog for package turtlebot4_diagnostics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge pull request <https://github.com/turtlebot/turtlebot4_robot/issues/26>
+* Remove stereo camera topic since it is not launched by default
+* Update the IMU frequency
+* Update rgb image topic
+* Contributors: Hilary Luo
+
 1.0.1 (2023-03-22)
 ------------------
 
