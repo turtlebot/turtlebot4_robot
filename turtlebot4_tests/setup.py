@@ -21,6 +21,7 @@ setup(
     entry_points={
         'console_scripts': [
             'ros_tests = turtlebot4_tests.ros_tests:main',
+            'pcba_test_publisher = turtlebot4_tests.pcba_test_publisher:main',
         ],
     },
 )
