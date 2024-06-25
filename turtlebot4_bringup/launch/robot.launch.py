@@ -15,6 +15,7 @@
 #
 # @author Roni Kreinin (rkreinin@clearpathrobotics.com)
 
+import os
 
 from ament_index_python.packages import get_package_share_directory
 
@@ -72,7 +73,6 @@ def generate_launch_description():
         output='screen',
         condition=LaunchConfigurationEquals('model', 'standard')
     )
-
     create3_republisher_node = Node(
         package='create3_republisher',
         executable='create3_republisher',
@@ -86,5 +86,6 @@ def generate_launch_description():
     ld.add_action(create3_param_file_cmd)
     ld.add_action(turtlebot4_node)
     ld.add_action(turtlebot4_base_node)
-    ld.add_action(create3_republisher_node)
+    if (os.environ.get('ROS_DISCOVERY_SERVER', '').strip(' ;\"')):
+        ld.add_action(create3_republisher_node)
     return ld
