@@ -15,6 +15,7 @@
 #
 # @author Roni Kreinin (rkreinin@clearpathrobotics.com)
 
+import os
 
 from ament_index_python.packages import get_package_share_directory
 
@@ -39,6 +40,7 @@ ARGUMENTS = [
 def generate_launch_description():
 
     pkg_turtlebot4_bringup = get_package_share_directory('turtlebot4_bringup')
+    create3_republisher = get_package_share_directory('create3_republisher')
 
     param_file_cmd = DeclareLaunchArgument(
         'param_file',
@@ -47,7 +49,15 @@ def generate_launch_description():
         description='Turtlebot4 Robot param file'
     )
 
+    create3_param_file_cmd = DeclareLaunchArgument(
+        'create3_param_file',
+        default_value=PathJoinSubstitution(
+            [create3_republisher, 'bringup', 'params.yaml']),
+        description='Create3 republisher param file'
+    )
+
     turtlebot4_param_yaml_file = LaunchConfiguration('param_file')
+    create3_repub_param_yaml_file = LaunchConfiguration('create3_param_file')
 
     turtlebot4_node = Node(
         package='turtlebot4_node',
@@ -63,9 +73,19 @@ def generate_launch_description():
         output='screen',
         condition=LaunchConfigurationEquals('model', 'standard')
     )
+    create3_republisher_node = Node(
+        package='create3_republisher',
+        executable='create3_republisher',
+        parameters=[create3_repub_param_yaml_file,
+                    {'robot_namespace': '_do_not_use'}],
+        output='screen',
+    )
 
     ld = LaunchDescription(ARGUMENTS)
     ld.add_action(param_file_cmd)
+    ld.add_action(create3_param_file_cmd)
     ld.add_action(turtlebot4_node)
     ld.add_action(turtlebot4_base_node)
+    if (os.environ.get('ROS_DISCOVERY_SERVER', '').strip(' ;\"')):
+        ld.add_action(create3_republisher_node)
     return ld
