@@ -2,6 +2,11 @@
 Changelog for package turtlebot4_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Launch the create3 republisher only for discovery server
+* Contributors: Hilary Luo
+
 1.0.2 (2023-11-08)
 ------------------
 * Merge pull request <https://github.com/turtlebot/turtlebot4_robot/issues/24>
