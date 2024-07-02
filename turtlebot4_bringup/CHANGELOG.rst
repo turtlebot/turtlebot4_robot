@@ -2,8 +2,8 @@
 Changelog for package turtlebot4_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.3 (2024-07-02)
+------------------
 * Launch the create3 republisher only for discovery server
 * Contributors: Hilary Luo
 
