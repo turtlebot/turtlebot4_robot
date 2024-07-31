@@ -25,6 +25,10 @@ from launch_ros.actions import Node
 
 from nav2_common.launch import RewrittenYaml
 
+ARGUMENTS = [
+    DeclareLaunchArgument('joy_device', default_value='/dev/input/js0',
+                          description='Linux joy input device')
+]
 
 def generate_launch_description():
     pkg_turtlebot4_bringup = get_package_share_directory('turtlebot4_bringup')
@@ -47,6 +51,9 @@ def generate_launch_description():
     joy_node = Node(
         package='joy_linux',
         executable='joy_linux_node',
+        parameters=[{
+            'dev': LaunchConfiguration('joy_device')
+        }],
         name='joy_linux_node',
         remappings=[('/diagnostics', 'diagnostics')]
     )
@@ -58,7 +65,7 @@ def generate_launch_description():
         parameters=[controller_config]
     )
 
-    ld = LaunchDescription()
+    ld = LaunchDescription(ARGUMENTS)
     ld.add_action(controller_config_cmd)
     ld.add_action(joy_node)
     ld.add_action(teleop_twist_joy_node)
