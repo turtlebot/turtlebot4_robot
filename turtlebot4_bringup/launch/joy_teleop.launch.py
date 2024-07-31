@@ -62,7 +62,10 @@ def generate_launch_description():
         package='teleop_twist_joy',
         executable='teleop_node',
         name='teleop_twist_joy_node',
-        parameters=[controller_config]
+        parameters=[
+            controller_config,
+            {'publish_stamped_twist': True}  # Stamped messages are required for Jazzy
+        ]
     )
 
     ld = LaunchDescription(ARGUMENTS)

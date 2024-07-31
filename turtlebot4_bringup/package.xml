@@ -19,7 +19,7 @@
   <depend>depthai_ros_msgs</depend>
   <depend>joy_linux</depend>
   <depend>nav2_common</depend>
-  <depend>teleop_twist_joy</depend>
+  <depend version_gte="2.6.1">teleop_twist_joy</depend> <!-- TwistStamped support needed -->
   <depend>tf2_ros</depend>
   <depend>create3_republisher</depend>
 
