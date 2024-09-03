@@ -414,7 +414,7 @@ class Turtlebot4RosTests(Node):
         if not self.odom_received:
             print('Waiting for odometry...')
 
-            while(not self.odom_received):
+            while not self.odom_received:
                 time.sleep(0.1)
 
             print('Odometry received')
