@@ -3,18 +3,18 @@ name: turtlebot4_robot_ci
 on: [push, pull_request]
 
 jobs:
-  turtlebot4_humble_ci:
-    name: Humble
-    runs-on: ubuntu-22.04
+  turtlebot4_jazzy_ci:
+    name: Jazzy
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v2.3.4
       - uses: ros-tooling/setup-ros@v0.7
         with:
-          required-ros-distributions: humble
+          required-ros-distributions: jazzy
       - uses: ros-tooling/action-ros-ci@v0.3
         id: action_ros_ci_step
         with:
-          target-ros2-distro: humble
+          target-ros2-distro: jazzy
           import-token: ${{ secrets.GITHUB_TOKEN }}
           vcs-repo-file-url: dependencies.repos
           package-name:
