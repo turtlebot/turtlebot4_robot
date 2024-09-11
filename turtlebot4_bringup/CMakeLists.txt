@@ -32,6 +32,11 @@ install(
   DESTINATION share/${PROJECT_NAME}
 )
 
+# disable XML linting; it consistently times out
+list(APPEND AMENT_LINT_AUTO_EXCLUDE
+  ament_cmake_xmllint
+)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   ament_lint_auto_find_test_dependencies()
