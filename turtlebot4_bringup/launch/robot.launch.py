@@ -88,6 +88,5 @@ def generate_launch_description():
     ld.add_action(create3_param_file_cmd)
     ld.add_action(turtlebot4_node)
     ld.add_action(turtlebot4_base_node)
-    if (os.environ.get('ROS_DISCOVERY_SERVER', '').strip(' ;\"')):
-        ld.add_action(create3_republisher_node)
+    ld.add_action(create3_republisher_node)
     return ld
