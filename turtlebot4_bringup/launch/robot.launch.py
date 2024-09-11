@@ -38,7 +38,7 @@ ARGUMENTS = [
 
 
 def generate_launch_description():
-    republisher_ns = '_do_not_use'
+    create3_ns = '_do_not_use'
 
     pkg_turtlebot4_bringup = get_package_share_directory('turtlebot4_bringup')
     create3_republisher = get_package_share_directory('create3_republisher')
@@ -80,10 +80,12 @@ def generate_launch_description():
         package='create3_republisher',
         executable='create3_republisher',
         parameters=[create3_repub_param_yaml_file,
-                    {'robot_namespace': republisher_ns}],
+                    {'robot_namespace': create3_ns}],
         output='screen',
         remappings=[
-            ([republisher_ns, 'cmd_vel'], [republisher_ns, 'cmd_vel_unstamped'])
+            # remap /cmd_vel to /cmd_vel_unstamped
+            # /_do_not_use/cmd_vel is unstamped
+            ('cmd_vel', 'cmd_vel_unstamped')
         ]
     )
     unstamper_node = Node(
@@ -91,8 +93,8 @@ def generate_launch_description():
         executable='twist_unstamper',
         name='twist_unstamper',
         remappings=[
-            ('cmd_vel_in', [republisher_ns, 'cmd_vel']),
-            ('cmd_vel_out', [republisher_ns, 'cmd_vel_unstamped'])
+            ('cmd_vel_in', 'cmd_vel'),
+            ('cmd_vel_out', 'cmd_vel_unstamped')
         ]
     )
 
