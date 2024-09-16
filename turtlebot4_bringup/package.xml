@@ -22,7 +22,6 @@
   <depend version_gte="2.6.1">teleop_twist_joy</depend> <!-- TwistStamped support needed -->
   <depend>tf2_ros</depend>
   <depend>create3_republisher</depend>
-  <depend>twist_stamper</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

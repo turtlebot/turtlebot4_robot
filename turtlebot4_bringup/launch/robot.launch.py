@@ -51,7 +51,7 @@ def generate_launch_description():
     create3_param_file_cmd = DeclareLaunchArgument(
         'create3_param_file',
         default_value=PathJoinSubstitution(
-            [create3_republisher, 'bringup', 'params.yaml']),
+            [pkg_turtlebot4_bringup, 'config', 'republisher.yaml']),
         description='Create3 republisher param file'
     )
 
@@ -82,17 +82,9 @@ def generate_launch_description():
         output='screen',
         remappings=[
             # remap /cmd_vel to /cmd_vel_unstamped
-            # /_do_not_use/cmd_vel is unstamped
-            ('cmd_vel', 'cmd_vel_unstamped')
-        ]
-    )
-    unstamper_node = Node(
-        package='twist_stamper',
-        executable='twist_unstamper',
-        name='twist_unstamper',
-        remappings=[
-            ('cmd_vel_in', 'cmd_vel'),
-            ('cmd_vel_out', 'cmd_vel_unstamped')
+            # and /cmd_vel_stamped to /cmd_vel
+            ('cmd_vel', 'cmd_vel_unstamped'),
+            ('cmd_vel_stamped', 'cmd_vel'),
         ]
     )
 
@@ -102,5 +94,4 @@ def generate_launch_description():
     ld.add_action(turtlebot4_node)
     ld.add_action(turtlebot4_base_node)
     ld.add_action(create3_republisher_node)
-    ld.add_action(unstamper_node)
     return ld
