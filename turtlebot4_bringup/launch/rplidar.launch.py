@@ -31,7 +31,7 @@ def generate_launch_description():
                 'frame_id': 'rplidar_link',
                 'inverted': False,
                 'angle_compensate': True,
-                'auto_standby': True,
+                'auto_standby': False,
             }],
         )
 
