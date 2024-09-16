@@ -5,7 +5,7 @@ turtlebot4_node:
 
     # Setting power_saver to True will make the TurtleBot 4
     # disable the camera and lidar while docked
-    power_saver: True  
+    power_saver: true
 
     # Supported Functions:
     # Dock
@@ -38,7 +38,7 @@ turtlebot4_node:
     # Format:
     # button: ["SHORT_PRESS_FUNC", "LONG_PRESS_FUNC", "LONG_PRESS_DURATION_MS"]
 
-    buttons:  
+    buttons:
       create3_1: ["Dock", "Wall Follow Left", "2000"]
       create3_power: ["EStop", "Power", "3000"]
       create3_2: ["Undock", "Wall Follow Right", "2000"]
