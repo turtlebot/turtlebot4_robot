@@ -39,7 +39,6 @@ def generate_launch_description():
     create3_ns = '_do_not_use'
 
     pkg_turtlebot4_bringup = get_package_share_directory('turtlebot4_bringup')
-    create3_republisher = get_package_share_directory('create3_republisher')
 
     param_file_cmd = DeclareLaunchArgument(
         'param_file',
