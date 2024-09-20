@@ -79,6 +79,7 @@ def generate_launch_description():
         parameters=[create3_repub_param_yaml_file,
                     {'robot_namespace': create3_ns}],
         output='screen',
+        respawn=True,
         remappings=[
             # remap /cmd_vel to /cmd_vel_unstamped
             # and /cmd_vel_stamped to /cmd_vel
