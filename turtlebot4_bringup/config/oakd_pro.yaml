@@ -19,6 +19,6 @@
       i_low_bandwidth: true
       i_keep_preview_aspect_ratio: true
       i_publish_topic: false
-      i_resolution: '1080'
+      i_resolution: '1080P'
       i_width: 1280
     use_sim_time: false
