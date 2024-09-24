@@ -5,7 +5,7 @@ turtlebot4_node:
 
     # Setting power_saver to True will make the TurtleBot 4
     # disable the camera and lidar while docked
-    power_saver: false
+    power_saver: true
 
     # Supported Functions:
     # Dock
