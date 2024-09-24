@@ -19,7 +19,7 @@
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchContext, LaunchDescription
-from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDescription, TimerAction  # noqa: E501
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import EnvironmentVariable, LaunchConfiguration, PathJoinSubstitution
 
@@ -84,9 +84,17 @@ def generate_launch_description():
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([rplidar_launch_file])),
 
-            IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([oakd_launch_file]),
-                launch_arguments=[('camera', 'oakd_lite')]),
+            # Delay the OAK-D startup for a bit
+            # This prevents spiking the current on the USB by having the lidar and camera
+            # start up at the same time as everything else
+            TimerAction(
+                period=30.0,
+                actions=[
+                    IncludeLaunchDescription(
+                        PythonLaunchDescriptionSource([oakd_launch_file]),
+                        launch_arguments=[('camera', 'oakd_lite')])
+                ]
+            ),
 
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([description_launch_file]),
