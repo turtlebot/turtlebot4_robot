@@ -2,6 +2,9 @@
 Changelog for package turtlebot4_robot
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.0.3 (2024-07-02)
 ------------------
 

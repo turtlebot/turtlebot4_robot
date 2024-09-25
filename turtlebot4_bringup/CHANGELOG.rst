@@ -2,6 +2,23 @@
 Changelog for package turtlebot4_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Enable power-saver by default
+* Add a delay to the oakd startup to work around a bug where the camera doesn't reliably publish data after restarting the systemd job
+* Fix the resolution for the OakD config files
+* Enable respawn for the republisher node
+* Clean up config file formatting
+* Remove unused variables
+* Remove unused imports
+* Disable XML linter; it's timing out and isn't needed for this package
+* Update the reamappings for the stamped/unstamped topics
+* Always use the Create3 republisher node
+* Remove deprecations in robot.launch.py
+* Enable TwistStamped publications for the teleop node
+* Add joy_device launch argument in case js0 isn't the correct joystick
+* Contributors: Chris Iverach-Brereton
+
 1.0.3 (2024-07-02)
 ------------------
 * Launch the create3 republisher only for discovery server
