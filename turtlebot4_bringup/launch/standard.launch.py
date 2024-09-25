@@ -38,6 +38,7 @@ def generate_launch_description():
     pkg_turtlebot4_bringup = get_package_share_directory('turtlebot4_bringup')
     pkg_turtlebot4_diagnostics = get_package_share_directory('turtlebot4_diagnostics')
     pkg_turtlebot4_description = get_package_share_directory('turtlebot4_description')
+    pkg_turtlebot4_vision = get_package_share_directory('turtlebot4_vision_tutorials')
 
     param_file_cmd = DeclareLaunchArgument(
         'param_file',
@@ -63,11 +64,14 @@ def generate_launch_description():
         [pkg_turtlebot4_diagnostics, 'launch', 'diagnostics.launch.py'])
     rplidar_launch_file = PathJoinSubstitution(
         [pkg_turtlebot4_bringup, 'launch', 'rplidar.launch.py'])
-    oakd_launch_file = PathJoinSubstitution(
-        [pkg_turtlebot4_bringup, 'launch', 'oakd.launch.py'])
+    # oakd_launch_file = PathJoinSubstitution(
+    #     [pkg_turtlebot4_bringup, 'launch', 'oakd.launch.py'])
     description_launch_file = PathJoinSubstitution(
-        [pkg_turtlebot4_description, 'launch', 'robot_description.launch.py']
-    )
+        [pkg_turtlebot4_description, 'launch', 'robot_description.launch.py'])
+    vision_launch_file = PathJoinSubstitution(
+        [pkg_turtlebot4_vision, 'launch', 'video_compression.launch.py'])
+    pose_launch_file = PathJoinSubstitution(
+        [pkg_turtlebot4_vision, 'launch', 'pose_detection.launch.py'])
 
     actions = [
             PushRosNamespace(namespace),
@@ -84,13 +88,19 @@ def generate_launch_description():
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([rplidar_launch_file])),
 
-            IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([oakd_launch_file]),
-                launch_arguments=[('camera', 'oakd_pro')]),
+            # IncludeLaunchDescription(
+            #     PythonLaunchDescriptionSource([oakd_launch_file]),
+            #     launch_arguments=[('camera', 'oakd_pro')]),
 
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([description_launch_file]),
                 launch_arguments=[('model', 'standard')]),
+
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([vision_launch_file])),
+
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([pose_launch_file])),
         ]
 
     if (diagnostics_enable.perform(lc)) == '1':
