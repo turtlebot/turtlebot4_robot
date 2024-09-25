@@ -2,8 +2,8 @@
 Changelog for package turtlebot4_tests
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.0.0 (2024-09-25)
+------------------
 * Small formatting fixes
 * Contributors: Chris Iverach-Brereton
 

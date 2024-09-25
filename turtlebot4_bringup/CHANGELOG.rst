@@ -2,8 +2,8 @@
 Changelog for package turtlebot4_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.0.0 (2024-09-25)
+------------------
 * Enable power-saver by default
 * Add a delay to the oakd startup to work around a bug where the camera doesn't reliably publish data after restarting the systemd job
 * Fix the resolution for the OakD config files
