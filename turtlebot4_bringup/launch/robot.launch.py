@@ -79,6 +79,7 @@ def generate_launch_description():
         parameters=[create3_repub_param_yaml_file,
                     {'robot_namespace': '_do_not_use'}],
         output='screen',
+        respawn=True,
     )
 
     ld = LaunchDescription(ARGUMENTS)
