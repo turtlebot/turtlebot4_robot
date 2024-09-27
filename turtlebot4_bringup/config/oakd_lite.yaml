@@ -20,6 +20,14 @@
       i_publish_topic: false
       i_resolution: '1080'
       i_width: 1280
+    oakd:
+      rgb:
+        preview:
+          image_raw:
+            enable_pub_plugins:
+              - image_transport/compressed
+              - image_transport/ffmpeg
+              - image_transport/raw
     use_sim_time: false
     ffmpeg_image_transport:
       qmax: 24
