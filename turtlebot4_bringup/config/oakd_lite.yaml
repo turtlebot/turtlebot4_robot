@@ -8,11 +8,12 @@
       i_usb_speed: SUPER_PLUS
     rgb:
       i_board_socket_id: 0
-      i_fps: 30.0
+      i_fps: 15.0
       i_height: 720
       i_interleaved: false
       i_max_q_size: 10
-      i_preview_size: 250
+      i_preview_width: 480
+      i_preview_height: 270
       i_enable_preview: true
       i_low_bandwidth: true
       i_keep_preview_aspect_ratio: true
@@ -20,3 +21,9 @@
       i_resolution: '1080'
       i_width: 1280
     use_sim_time: false
+    ffmpeg_image_transport:
+      qmax: 24
+      preset: ultrafast
+      tune: zerolatency
+      bit_rate: 800000
+      gop_size: 6
