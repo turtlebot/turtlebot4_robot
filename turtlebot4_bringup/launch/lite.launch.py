@@ -92,7 +92,10 @@ def generate_launch_description():
                 actions=[
                     IncludeLaunchDescription(
                         PythonLaunchDescriptionSource([oakd_launch_file]),
-                        launch_arguments=[('camera', 'oakd_lite')])
+                        launch_arguments=[
+                            ('camera', 'oakd_lite'),
+                            ('namespace', namespace),
+                        ])
                 ]
             ),
 
