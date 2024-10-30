@@ -4,7 +4,9 @@
   <name>turtlebot4_robot</name>
   <version>2.0.1</version>
   <description>Turtlebot4 Robot Metapackage</description>
-  <maintainer email="rkreinin@clearpathrobotics.com">rkreinin</maintainer>
+  <maintainer email="civerachb@clearpathrobotics.com">Chris Iverach-Brereton</maintainer>
+  <maintainer email="hluo@clearpathrobotics.com">Hilary Luo</maintainer>
+  <author email="rkreinin@clearpathrobotics.com">Roni Kreinin</author>
   <license>Apache 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
