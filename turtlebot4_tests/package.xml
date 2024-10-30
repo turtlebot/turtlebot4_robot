@@ -6,8 +6,10 @@
   <description>Turtlebot4 System Tests</description>
   <maintainer email="civerachb@clearpathrobotics.com">Chris Iverach-Brereton</maintainer>
   <maintainer email="hluo@clearpathrobotics.com">Hilary Luo</maintainer>
-  <author email="rkreinin@clearpathrobotics.com">Roni Kreinin</author>
+
   <license>Apache 2.0</license>
+
+  <author email="rkreinin@clearpathrobotics.com">Roni Kreinin</author>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

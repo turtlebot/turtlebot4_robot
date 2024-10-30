@@ -6,8 +6,10 @@
   <description>Turtlebot4 Base Node</description>
   <maintainer email="civerachb@clearpathrobotics.com">Chris Iverach-Brereton</maintainer>
   <maintainer email="hluo@clearpathrobotics.com">Hilary Luo</maintainer>
-  <author email="rkreinin@clearpathrobotics.com">Roni Kreinin</author>
+
   <license>Apache 2.0</license>
+
+  <author email="rkreinin@clearpathrobotics.com">Roni Kreinin</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
