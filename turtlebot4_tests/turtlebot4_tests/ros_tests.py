@@ -42,6 +42,8 @@ from rclpy.action import ActionClient
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 
+from irobot_create_msgs.srv import EStop
+
 from std_msgs.msg import String
 
 from turtlebot4_msgs.msg import UserButton, UserLed
@@ -195,6 +197,12 @@ class Turtlebot4RosTests(Node):
         while not self.create_button_msg.button_2.is_pressed:
             pass
         results.append(boolTestResults(True, 'Create Button 2'))
+
+        # Pressing the middle button can engage the e-stop, so clear it
+        e_stop_service_client = self.create_client(EStop, 'e_stop')
+        req = EStop.Request()
+        req.e_stop_on = False
+        e_stop_service_client.call(req)
 
         self.destroy_subscription(create_button_sub)
         printTestResults('Create3 Button Test', results)
