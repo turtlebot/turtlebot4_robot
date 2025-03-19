@@ -18,7 +18,7 @@
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions.declare_launch_argument import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
 from launch_ros.actions import Node
@@ -27,9 +27,10 @@ from nav2_common.launch import RewrittenYaml
 
 ARGUMENTS = [
     DeclareLaunchArgument('joy_device', default_value='/dev/input/js0',
-                          description='Linux joy input device')
+                          description='Linux joy input device'),
+    DeclareLaunchArgument('namespace', default_value='',
+                          description='Namespace for the launched nodes')
 ]
-
 
 def generate_launch_description():
     pkg_turtlebot4_bringup = get_package_share_directory('turtlebot4_bringup')
