@@ -18,13 +18,19 @@
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions.declare_launch_argument import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
 from launch_ros.actions import Node
 
 from nav2_common.launch import RewrittenYaml
 
+ARGUMENTS = [
+    DeclareLaunchArgument('joy_device', default_value='/dev/input/js0',
+                          description='Linux joy input device'),
+    DeclareLaunchArgument('namespace', default_value='',
+                          description='Namespace for the launched nodes')
+]
 
 def generate_launch_description():
     pkg_turtlebot4_bringup = get_package_share_directory('turtlebot4_bringup')
@@ -34,12 +40,6 @@ def generate_launch_description():
         default_value=PathJoinSubstitution(
             [pkg_turtlebot4_bringup, 'config', 'turtlebot4_controller.config.yaml']),
         description='Turtlebot4 Joy teleop param file'
-    )
-
-    namespace_cmd = DeclareLaunchArgument(
-        'namespace',
-        default_value='',
-        description='Namespace for the launched nodes'
     )
 
     namespace = LaunchConfiguration('namespace')
@@ -53,6 +53,9 @@ def generate_launch_description():
     joy_node = Node(
         package='joy_linux',
         executable='joy_linux_node',
+        parameters=[{
+            'dev': LaunchConfiguration('joy_device')
+        }],
         name='joy_linux_node',
         remappings=[('/diagnostics', 'diagnostics')]
     )
@@ -61,12 +64,14 @@ def generate_launch_description():
         package='teleop_twist_joy',
         executable='teleop_node',
         name='teleop_twist_joy_node',
-        parameters=[controller_config]
+        parameters=[
+            controller_config,
+            {'publish_stamped_twist': True}  # Stamped messages are required for Jazzy
+        ]
     )
 
-    ld = LaunchDescription()
+    ld = LaunchDescription(ARGUMENTS)
     ld.add_action(controller_config_cmd)
-    ld.add_action(namespace_cmd)
     ld.add_action(joy_node)
     ld.add_action(teleop_twist_joy_node)
 
