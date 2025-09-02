@@ -34,6 +34,7 @@ import time
 
 from irobot_create_msgs.action import Dock, DriveDistance, RotateAngle, Undock
 from irobot_create_msgs.msg import DockStatus, InterfaceButtons, LightringLeds
+from irobot_create_msgs.srv import EStop
 
 from nav_msgs.msg import Odometry
 
@@ -41,8 +42,6 @@ import rclpy
 from rclpy.action import ActionClient
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
-
-from irobot_create_msgs.srv import EStop
 
 from std_msgs.msg import String
 
