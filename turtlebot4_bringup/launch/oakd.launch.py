@@ -18,22 +18,19 @@
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, GroupAction
+from launch.actions import DeclareLaunchArgument, GroupAction, OpaqueFunction
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
-from launch_ros.actions import ComposableNodeContainer, PushRosNamespace
+from launch_ros.actions import ComposableNodeContainer, PushRosNamespace, SetRemap
 from launch_ros.descriptions import ComposableNode
 
 from nav2_common.launch import RewrittenYaml
 
 
-def generate_launch_description():
-    pkg_turtlebot4_bringup = get_package_share_directory('turtlebot4_bringup')
-
-    camera = LaunchConfiguration('camera')
-    params_file = LaunchConfiguration('params_file')
-    namespace = LaunchConfiguration('namespace')
-
-    ARGUMENTS = [
+pkg_turtlebot4_bringup = get_package_share_directory('turtlebot4_bringup')
+camera = LaunchConfiguration('camera')
+params_file = LaunchConfiguration('params_file')
+namespace = LaunchConfiguration('namespace')
+ARGUMENTS = [
         DeclareLaunchArgument('camera', default_value='oakd_pro'),
         DeclareLaunchArgument('params_file',
                               default_value=[PathJoinSubstitution(
@@ -42,13 +39,23 @@ def generate_launch_description():
                               description='Robot namespace')
     ]
 
+
+def launch_setup(context, *args, **kwargs):
+    namespace_str = namespace.perform(context)
+    if (namespace_str and not namespace_str.startswith('/')):
+        namespace_str = '/' + namespace_str
+
     namespaced_param_file = RewrittenYaml(
         source_file=params_file,
         root_key=namespace,
         param_rewrites={},
-        convert_types=True)
+        convert_types=True,
+    )
 
-    node = ComposableNodeContainer(
+    oakd = GroupAction([
+        PushRosNamespace(namespace),
+        SetRemap('/diagnostics', namespace_str + '/diagnostics'),
+        ComposableNodeContainer(
             name='oakd_container',
             namespace=namespace,
             package='rclcpp_components',
@@ -63,13 +70,12 @@ def generate_launch_description():
             ],
             output='screen',
         )
+    ])
 
-    actions = [
-        PushRosNamespace(namespace),
-        node
-    ]
-    oakd = GroupAction(actions)
+    return [oakd]
 
+
+def generate_launch_description():
     ld = LaunchDescription(ARGUMENTS)
-    ld.add_action(oakd)
+    ld.add_action(OpaqueFunction(function=launch_setup))
     return ld
